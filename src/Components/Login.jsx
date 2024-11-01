@@ -21,7 +21,7 @@ const Login = () => {
 
         AuthService.login(values.email, values.password).then(
             () => {
-                navigate("/profile");
+                navigate("/");
                 window.location.reload();
             },
             (error) => {

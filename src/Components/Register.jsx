@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, {useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Button, Typography, Grid } from "antd";
+import { Form, Input, Button, Typography, Grid, Modal } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import AuthService from "../services/auth.service";
+import InputOTPPage from "./InputOTPPage.jsx";
 import MyModal from "./Modal/MyModal.jsx";
 const { Text, Title, Link } = Typography;
 const { useBreakpoint } = Grid;
 
 const Register = () => {
+    const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [isFormValid, setIsFormValid] = useState(false); // Track form validity
@@ -15,14 +17,22 @@ const Register = () => {
     const navigate = useNavigate();
     const screens = useBreakpoint();
     const [modal, setModal] = useState(false);
+    const handleOk = () => {
+        setModal(false);
+    };
+
+    const handleCancel = () => {
+        setModal(false);
+    };
     const onFinish = (values) => {
         setLoading(true);
         setMessage("");
-
+        setEmail(values.email)
         AuthService.register(values.username, values.email, values.password)
+
             .then((response) => {
                 setModal(true) // Redirect to login page after successful registration
-                window.location.reload();
+
             })
             .catch((error) => {
                 console.log(error);
@@ -69,66 +79,70 @@ const Register = () => {
     };
 
     return (
-        <section style={styles.section}>
-            <div style={styles.container}>
-                <MyModal visible={modal} setVisible={setModal}>
-                    <Createitem setItems={setItems} items={items} setModal={setModal}/>
-                </MyModal>
-                <div style={styles.header}>
-                    <Title style={styles.title}>Sign Up</Title>
-                    <Text style={styles.text}>
-                        Create your account by filling in the details below.
-                    </Text>
-                </div>
-                <Form
-                    form={form}
-                    name="register_form"
-                    onFinish={onFinish}
-                    onFieldsChange={onFieldsChange} // Track form field changes
-                    layout="vertical"
-                    requiredMark="optional"
-                >
-                    <Form.Item
-                        name="username"
-                        rules={[{ required: true, message: "Please input your Username!" }]}
-                    >
-                        <Input prefix={<UserOutlined />} placeholder="Username" />
-                    </Form.Item>
-                    <Form.Item
-                        name="email"
-                        rules={[{ type: "email", required: true, message: "Please input your Email!" }]}
-                    >
-                        <Input prefix={<MailOutlined />} placeholder="Email" />
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: "Please input your Password!" }]}
-                    >
-                        <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            block
-                            loading={loading}
-                            disabled={!isFormValid || loading} // Disable until form is valid
-                        >
-                            Sign Up
-                        </Button>
-                        {message && (
-                            <div className="alert alert-danger" role="alert" style={{ marginTop: "16px" }}>
-                                {message}
-                            </div>
-                        )}
-                    </Form.Item>
-                    <div style={styles.footer}>
-                        <Text style={styles.text}>Already have an account?</Text>{" "}
-                        <Link href="/login">Log in now</Link>
+        <>
+            <Modal title="Basic Modal" open={modal} onOk={handleOk} onCancel={handleCancel}>
+                <InputOTPPage email={email}/>
+            </Modal>
+            <section style={styles.section}>
+                <div style={styles.container}>
+
+                    <div style={styles.header}>
+                        <Title style={styles.title}>Sign Up</Title>
+                        <Text style={styles.text}>
+                            Create your account by filling in the details below.
+                        </Text>
                     </div>
-                </Form>
-            </div>
-        </section>
+                    <Form
+                        form={form}
+                        name="register_form"
+                        onFinish={onFinish}
+                        onFieldsChange={onFieldsChange} // Track form field changes
+                        layout="vertical"
+                        requiredMark="optional"
+                    >
+                        <Form.Item
+                            name="username"
+                            rules={[{required: true, message: "Please input your Username!"}]}
+                        >
+                            <Input prefix={<UserOutlined/>} placeholder="Username"/>
+                        </Form.Item>
+                        <Form.Item
+                            name="email"
+                            rules={[{type: "email", required: true, message: "Please input your Email!"}]}
+                        >
+                            <Input prefix={<MailOutlined/>} placeholder="Email"/>
+                        </Form.Item>
+                        <Form.Item
+                            name="password"
+                            rules={[{required: true, message: "Please input your Password!"}]}
+                        >
+                            <Input.Password prefix={<LockOutlined/>} placeholder="Password"/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                block
+                                loading={loading}
+                                disabled={!isFormValid || loading} // Disable until form is valid
+                            >
+                                Sign Up
+                            </Button>
+                            {message && (
+                                <div className="alert alert-danger" role="alert" style={{marginTop: "16px"}}>
+                                    {message}
+                                </div>
+                            )}
+                        </Form.Item>
+                        <div style={styles.footer}>
+                            <Text style={styles.text}>Already have an account?</Text>{" "}
+                            <Link href="/login">Log in now</Link>
+                        </div>
+                    </Form>
+                </div>
+            </section>
+        </>
+
     );
 };
 
