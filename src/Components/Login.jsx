@@ -1,127 +1,131 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-
+import { Form, Input, Button,  Typography, Grid } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import AuthService from "../services/auth.service";
 
-const required = (value) => {
-    if (!value) {
-        return (
-            <div className="invalid-feedback d-block">
-                This field is required!
-            </div>
-        );
-    }
-};
+const { Text, Title, Link } = Typography;
+const { useBreakpoint } = Grid;
 
 const Login = () => {
-    const form = useRef();
-    const checkBtn = useRef();
-
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
-
+    const [isFormValid, setIsFormValid] = useState(false); // Track form validity
+    const [form] = Form.useForm();
     const navigate = useNavigate();
+    const screens = useBreakpoint();
 
-    const onChangeUsername = (e) => {
-        const username = e.target.value;
-        setUsername(username);
-    };
-
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
-    };
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-
-        setMessage("");
+    const onFinish = (values) => {
         setLoading(true);
+        setMessage("");
 
-        form.current.validateAll();
+        AuthService.login(values.email, values.password).then(
+            () => {
+                navigate("/profile");
+                window.location.reload();
+            },
+            (error) => {
+                const resMessage =
+                    (error.response && error.response.data && error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                setLoading(false);
+                setMessage(resMessage);
+            }
+        );
+    };
 
-        if (checkBtn.current.context._errors.length === 0) {
-            AuthService.login(username, password).then(
-                () => {
-                    navigate("/profile");
-                    window.location.reload();
-                },
-                (error) => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+    const onFieldsChange = (_, allFields) => {
 
-                    setLoading(false);
-                    setMessage(resMessage);
-                }
-            );
-        } else {
-            setLoading(false);
+        setIsFormValid(allFields.every(field => field.errors.length === 0 && field.touched));
+    };
+
+    const styles = {
+        container: {
+            margin: "0 auto",
+            padding: screens.md ? "32px" : "24px",
+            width: "380px"
+        },
+        footer: {
+            marginTop: "16px",
+            textAlign: "center",
+            width: "100%"
+        },
+        forgotPassword: {
+            float: "right"
+        },
+        header: {
+            marginBottom: "24px"
+        },
+        section: {
+            alignItems: "center",
+            display: "flex",
+            height: screens.sm ? "100vh" : "auto",
+            padding: screens.md ? "48px 0" : "0",
+            width: "100%"
+        },
+        text: {
+            color: "#8c8c8c"
+        },
+        title: {
+            fontSize: screens.md ? "24px" : "20px"
         }
     };
 
     return (
-        <div className="col-md-12">
-            <div className="card card-container">
-                <img
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    alt="profile-img"
-                    className="profile-img-card"
-                />
+        <section style={styles.section}>
+            <div style={styles.container}>
+                <div style={styles.header}>
+                    <Title style={styles.title}>Sign in</Title>
+                    <Text style={styles.text}>
+                        Welcome back! Please enter your details below to sign in.
+                    </Text>
+                </div>
+                <Form
+                    form={form}
+                    name="login_form"
+                    initialValues={{ remember: true }}
+                    onFinish={onFinish}
+                    onFieldsChange={onFieldsChange} // Track form field changes
+                    layout="vertical"
+                    requiredMark="optional"
+                >
+                    <Form.Item
+                        name="email"
+                        rules={[{ type: "email", required: true, message: "Please input your Email!" }]}
+                    >
+                        <Input prefix={<MailOutlined />} placeholder="Email" />
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: "Please input your Password!" }]}
+                    >
+                        <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+                    </Form.Item>
 
-                <Form onSubmit={handleLogin} ref={form}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <Input
-                            type="text"
-                            className="form-control"
-                            name="username"
-                            value={username}
-                            onChange={onChangeUsername}
-                            validations={[required]}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <Input
-                            type="password"
-                            className="form-control"
-                            name="password"
-                            value={password}
-                            onChange={onChangePassword}
-                            validations={[required]}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <button className="btn btn-primary btn-block" disabled={loading}>
-                            {loading && (
-                                <span className="spinner-border spinner-border-sm"></span>
-                            )}
-                            <span>Login</span>
-                        </button>
-                    </div>
-
-                    {message && (
-                        <div className="form-group">
-                            <div className="alert alert-danger" role="alert">
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            loading={loading}
+                            disabled={!isFormValid || loading} // Disable until form is valid
+                        >
+                            Log in
+                        </Button>
+                        {message && (
+                            <div className="alert alert-danger" role="alert" style={{ marginTop: "16px" }}>
                                 {message}
                             </div>
-                        </div>
-                    )}
-                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                        )}
+                    </Form.Item>
+                    <div style={styles.footer}>
+                        <Text style={styles.text}> Dont have an account?</Text>{" "}
+                        <Link href="/register">Sign up now</Link>
+                    </div>
                 </Form>
             </div>
-        </div>
+        </section>
     );
 };
 
