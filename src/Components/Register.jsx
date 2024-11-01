@@ -1,176 +1,134 @@
-import{ useState, useRef } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Button, Typography, Grid } from "antd";
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import AuthService from "../services/auth.service";
+import MyModal from "./Modal/MyModal.jsx";
+const { Text, Title, Link } = Typography;
+const { useBreakpoint } = Grid;
 
-const required = (value) => {
-    if (!value) {
-        return (
-            <div className="invalid-feedback d-block">
-                This field is required!
-            </div>
-        );
-    }
-};
-
-const validEmail = (value) => {
-    if (!isEmail(value)) {
-        return (
-            <div className="invalid-feedback d-block">
-                This is not a valid email.
-            </div>
-        );
-    }
-};
-
-const vusername = (value) => {
-    if (value.length < 3 || value.length > 20) {
-        return (
-            <div className="invalid-feedback d-block">
-                The username must be between 3 and 20 characters.
-            </div>
-        );
-    }
-};
-
-const vpassword = (value) => {
-    if (value.length < 6 || value.length > 40) {
-        return (
-            <div className="invalid-feedback d-block">
-                The password must be between 6 and 40 characters.
-            </div>
-        );
-    }
-};
-
-const Register = (props) => {
-    const form = useRef();
-    const checkBtn = useRef();
-
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const [successful, setSuccessful] = useState(false);
+const Register = () => {
+    const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
-
-    const onChangeUsername = (e) => {
-        const username = e.target.value;
-        setUsername(username);
-    };
-
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
-    };
-
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
-    };
-
-    const handleRegister = (e) => {
-        e.preventDefault();
-
+    const [isFormValid, setIsFormValid] = useState(false); // Track form validity
+    const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const screens = useBreakpoint();
+    const [modal, setModal] = useState(false);
+    const onFinish = (values) => {
+        setLoading(true);
         setMessage("");
-        setSuccessful(false);
 
-        form.current.validateAll();
+        AuthService.register(values.username, values.email, values.password)
+            .then((response) => {
+                setModal(true) // Redirect to login page after successful registration
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+                const resMessage =
+                    (error.response && error.response.data && error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                setLoading(false);
+                setMessage(resMessage);
+            });
+    };
 
-        if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(username, email, password).then(
-                (response) => {
-                    setMessage(response.data.message);
-                    setSuccessful(true);
-                },
-                (error) => {
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
+    const onFieldsChange = (_, allFields) => {
+        setIsFormValid(allFields.every(field => field.errors.length === 0 && field.touched));
+    };
 
-                    setMessage(resMessage);
-                    setSuccessful(false);
-                }
-            );
-        }
+    const styles = {
+        container: {
+            margin: "0 auto",
+            padding: screens.md ? "32px" : "24px",
+            width: "380px",
+        },
+        footer: {
+            marginTop: "16px",
+            textAlign: "center",
+            width: "100%",
+        },
+        header: {
+            marginBottom: "24px",
+        },
+        section: {
+            alignItems: "center",
+            display: "flex",
+            height: screens.sm ? "100vh" : "auto",
+            padding: screens.md ? "48px 0" : "0",
+            width: "100%",
+        },
+        text: {
+            color: "#8c8c8c",
+        },
+        title: {
+            fontSize: screens.md ? "24px" : "20px",
+        },
     };
 
     return (
-        <div className="col-md-12">
-            <div className="card card-container">
-                <img
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    alt="profile-img"
-                    className="profile-img-card"
-                />
-
-                <Form onSubmit={handleRegister} ref={form}>
-                    {!successful && (
-                        <div>
-                            <div className="form-group">
-                                <label htmlFor="username">Username</label>
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    name="username"
-                                    value={username}
-                                    onChange={onChangeUsername}
-                                    validations={[required, vusername]}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="email">Email</label>
-                                <Input
-                                    type="text"
-                                    className="form-control"
-                                    name="email"
-                                    value={email}
-                                    onChange={onChangeEmail}
-                                    validations={[required, validEmail]}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="password">Password</label>
-                                <Input
-                                    type="password"
-                                    className="form-control"
-                                    name="password"
-                                    value={password}
-                                    onChange={onChangePassword}
-                                    validations={[required, vpassword]}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <button className="btn btn-primary btn-block">Sign Up</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {message && (
-                        <div className="form-group">
-                            <div
-                                className={
-                                    successful ? "alert alert-success" : "alert alert-danger"
-                                }
-                                role="alert"
-                            >
+        <section style={styles.section}>
+            <div style={styles.container}>
+                <MyModal visible={modal} setVisible={setModal}>
+                    <Createitem setItems={setItems} items={items} setModal={setModal}/>
+                </MyModal>
+                <div style={styles.header}>
+                    <Title style={styles.title}>Sign Up</Title>
+                    <Text style={styles.text}>
+                        Create your account by filling in the details below.
+                    </Text>
+                </div>
+                <Form
+                    form={form}
+                    name="register_form"
+                    onFinish={onFinish}
+                    onFieldsChange={onFieldsChange} // Track form field changes
+                    layout="vertical"
+                    requiredMark="optional"
+                >
+                    <Form.Item
+                        name="username"
+                        rules={[{ required: true, message: "Please input your Username!" }]}
+                    >
+                        <Input prefix={<UserOutlined />} placeholder="Username" />
+                    </Form.Item>
+                    <Form.Item
+                        name="email"
+                        rules={[{ type: "email", required: true, message: "Please input your Email!" }]}
+                    >
+                        <Input prefix={<MailOutlined />} placeholder="Email" />
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: "Please input your Password!" }]}
+                    >
+                        <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            loading={loading}
+                            disabled={!isFormValid || loading} // Disable until form is valid
+                        >
+                            Sign Up
+                        </Button>
+                        {message && (
+                            <div className="alert alert-danger" role="alert" style={{ marginTop: "16px" }}>
                                 {message}
                             </div>
-                        </div>
-                    )}
-                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                        )}
+                    </Form.Item>
+                    <div style={styles.footer}>
+                        <Text style={styles.text}>Already have an account?</Text>{" "}
+                        <Link href="/login">Log in now</Link>
+                    </div>
                 </Form>
             </div>
-        </div>
+        </section>
     );
 };
 

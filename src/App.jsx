@@ -31,10 +31,7 @@ const App = () => {
             setCurrentUser(user);
             setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
             setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
-        } else {
-            navigate("/login"); // Перенаправление на страницу логина, если пользователь не авторизован
         }
-
         EventBus.on("logout", () => {
             logOut();
         });
@@ -59,6 +56,7 @@ const App = () => {
                 <Routes>
                     {!currentUser ? (
                         <>
+                            <Route exact path="/" element={<Login />} />
                             <Route exact path="/login" element={<Login />} />
                             <Route exact path="/register" element={<Register />} />
                         </>

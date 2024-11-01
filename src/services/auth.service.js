@@ -1,4 +1,7 @@
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+
+const navigate= useNavigate();
 
 const API_URL = "http://localhost:8000/api/v1/auth/";
 
@@ -23,7 +26,21 @@ const login = (email, password) => {
                 localStorage.setItem("user", JSON.stringify(response.data));
                 console.log(response.date);
             }
-z
+
+            return response.data;
+        });
+};
+const otp = (email, otp) => {
+    return axios
+        .post(API_URL + "otp", {
+            email,
+            otp,
+        })
+        .then((response) => {
+            if (response.data) {
+                navigate("/login")
+            }
+
             return response.data;
         });
 };
@@ -44,6 +61,7 @@ const AuthService = {
     login,
     logout,
     getCurrentUser,
+    otp,
 }
 
 export default AuthService;

@@ -1,4 +1,4 @@
-.sidebar {
+.sidebar {position: fixed;
 color: #ffffff;
 }
 .logo {
@@ -17,4 +17,12 @@ color: #ffffff;
     border-radius: 50%;
     font-size: 2.5rem;
     background:rgba(28,17,41,0.88);
+}
+.menuList{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 95vh;
+    font-size: 1rem;
+    position: relative;
 }
