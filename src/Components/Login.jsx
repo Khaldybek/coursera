@@ -21,8 +21,8 @@ const Login = () => {
 
         AuthService.login(values.email, values.password).then(
             () => {
-                navigate("/");
-                window.location.reload();
+
+                values.preventDefault
             },
             (error) => {
                 const resMessage =

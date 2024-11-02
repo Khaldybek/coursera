@@ -23,7 +23,7 @@ const App = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
 
     const navigate = useNavigate();
-    console.log(localStorage.getItem("user"));
+
     useEffect(() => {
         const user = AuthService.getCurrentUser();
 
