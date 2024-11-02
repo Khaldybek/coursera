@@ -19,7 +19,8 @@ const login = (email, password) => {
         })
         .then((response) => {
             if (response.data) {
-                console.log(jwtDecode(response.data.access_token));
+                localStorage.setItem("user", JSON.stringify(jwtDecode(response.data.access_token)));
+                console.log(localStorage.getItem("user"));
             }
 
             return response.data;

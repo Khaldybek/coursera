@@ -21,8 +21,8 @@ const Login = () => {
 
         AuthService.login(values.email, values.password).then(
             () => {
-
-                values.preventDefault
+                navigate("/");
+                window.location.reload();
             },
             (error) => {
                 const resMessage =
@@ -30,7 +30,7 @@ const Login = () => {
                     error.message ||
                     error.toString();
                 setLoading(false);
-                setMessage(resMessage);
+                setMessage("неправильный адрес электронной почты или пароль");
             }
         );
     };

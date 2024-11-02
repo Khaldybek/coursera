@@ -18,7 +18,7 @@ const InputOTPPage = ({email}) => {
     const handleFinish = (values) => {
         const otp = values.otp.join('');
         AuthService.otp(email,otp).then((response) => {
-
+                navigate("/login");
             }).catch((error) =>{
                 errorOTP(error);
         })

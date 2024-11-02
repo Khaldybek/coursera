@@ -16,21 +16,19 @@ import BoardAdmin from "./Components/BoardAdmin.jsx";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
-
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
 
     const navigate = useNavigate();
-
     useEffect(() => {
         const user = AuthService.getCurrentUser();
 
         if (user) {
             setCurrentUser(user);
-            setShowModeratorBoard(user.roles.includes("MODERATOR"));
-            setShowAdminBoard(user.roles.includes("ADMIN"));
+            setShowModeratorBoard(user.ROLE.includes("MODERATOR"));
+            setShowAdminBoard(user.ROLE.includes("ADMIN"));
         }
         EventBus.on("logout", () => {
             logOut();
@@ -48,7 +46,6 @@ const App = () => {
         setCurrentUser(undefined);
         navigate("/login"); // Перенаправление на логин после выхода
     };
-
     return (
         <div className="mainDisplay">
             {currentUser && <Navbar />}
