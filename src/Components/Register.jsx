@@ -4,7 +4,6 @@ import { Form, Input, Button, Typography, Grid, Modal } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import AuthService from "../services/auth.service";
 import InputOTPPage from "./InputOTPPage.jsx";
-import MyModal from "./Modal/MyModal.jsx";
 const { Text, Title, Link } = Typography;
 const { useBreakpoint } = Grid;
 

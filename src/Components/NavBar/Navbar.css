@@ -1,5 +1,9 @@
-.sidebar {position: fixed;
-color: #ffffff;
+.sidebar {
+    position: fixed;
+    color: #ffffff;
+    padding: 0px;
+    margin: 0px;
+
 }
 .logo {
     display: flex;

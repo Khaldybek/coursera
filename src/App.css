@@ -30,7 +30,10 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
-.mainDisplay{
+.mainDisplay {
   display: flex;
+}
 
+.mainDisplay > div {
+  max-width: 100%;
 }

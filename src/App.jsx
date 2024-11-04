@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AboutUs from "./Components/AboutUs.jsx";
 import AuthService from "./services/auth.service";
-
+import Moderators from "./Components/Admin/Moderators.jsx";
 import Login from "./Components/Login.jsx";
 import Register from "./Components/Register.jsx";
 import Home from "./Components/Home.jsx";
@@ -12,7 +12,7 @@ import Profile from "./Components/Profile.jsx";
 import BoardUser from "./Components/BoardUser.jsx";
 import BoardModerator from "./Components/BoardModerator.jsx";
 import BoardAdmin from "./Components/BoardAdmin.jsx";
-
+import Users from "./Components/Admin/Users.jsx";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
@@ -20,7 +20,7 @@ const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
-
+    console.log(currentUser);
     const navigate = useNavigate();
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -48,8 +48,8 @@ const App = () => {
     };
     return (
         <div className="mainDisplay">
-            {currentUser && <Navbar />}
-            <div className="container mt-3" style={{ margin: 0, padding: 0 }}>
+            {currentUser &&<Navbar /> }
+            <div className="container mt-3" style={{ margin: 0, padding: 0 ,display:"flex" ,justifyContent:"center" }}>
                 <Routes>
                     {!currentUser ? (
                         <>
@@ -59,6 +59,8 @@ const App = () => {
                         </>
                     ) : (
                         <>
+                            <Route exact path="/mod" element={<Moderators />} />
+                            <Route exact path="/users" element={<Users />} />
                             <Route exact path="/" element={<AboutUs />} />
                             <Route exact path="/home" element={<Home />} />
                             <Route exact path="/profile" element={<Profile />} />
