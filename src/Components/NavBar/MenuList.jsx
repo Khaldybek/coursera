@@ -1,5 +1,6 @@
 import { Menu } from 'antd';
-import { ProfileOutlined, SwitcherOutlined, TeamOutlined, LogoutOutlined, IdcardOutlined } from "@ant-design/icons";
+import { ProfileOutlined,PlusSquareOutlined, SwitcherOutlined, TeamOutlined,
+    LogoutOutlined, IdcardOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service.js";
 
@@ -23,6 +24,18 @@ const MenuList = () => {
                         </Menu.Item>
                         <Menu.Item key="survey" icon={<ProfileOutlined style={{ fontSize: "20px" }} />}>
                             Опрос
+                        </Menu.Item>
+                    </>
+                )
+            }
+            {
+                role==="MODERATOR" && (
+                    <>
+                        <Menu.Item key="create courses" icon={<PlusSquareOutlined style={{ fontSize: "20px" }} />}>
+                            Создать Курсы
+                        </Menu.Item>
+                        <Menu.Item key="survey" icon={<ProfileOutlined style={{ fontSize: "20px" }} />}>
+                            Мои Курсы
                         </Menu.Item>
                     </>
                 )
