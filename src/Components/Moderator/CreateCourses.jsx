@@ -1,69 +1,52 @@
 import React from "react";
-import { Form, Input, Button, Space } from "antd";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Form, Input, Button } from "antd";
+import CoursesService from "../../services/courses.service.js";
 
 export default function UserCreate() {
     const [form] = Form.useForm();
 
-    const handleSave = (values) => {
-        console.log("Form Values:", values);
-
+    const handleSave = async (values) => {
+        try {
+            // Отправка данных на сервер через CoursesService
+            await CoursesService.create(values.name, values.description, values.companyName);
+            // Вы можете добавить уведомление об успешной операции, например:
+            alert('Курс успешно создан!');
+            form.resetFields(); // Очистка полей формы после успешного сохранения
+        } catch (error) {
+            // Обработка ошибок, например, выводим сообщение об ошибке
+            alert('Произошла ошибка при создании курса.');
+        }
     };
 
     return (
         <div style={{ padding: "24px", background: "#fff" }}>
             <Form form={form} layout="vertical" onFinish={handleSave}>
                 <Form.Item
-                    name="firstName"
-                    label="First Name"
+                    name="name"
+                    label="Course Name"
                     style={{ maxWidth: "893px" }}
-                    rules={[{ required: true, message: "Please enter your name" }]}
+                    rules={[{ required: true, message: "Please enter Course Name" }]}
                 >
                     <Input placeholder="e.g John" />
                 </Form.Item>
                 <Form.Item
-                    name="email"
-                    label="Email"
+                    name="description"
+                    label="Description"
                     style={{ maxWidth: "893px" }}
-                    rules={[{ required: true, message: "Please enter your email" }]}
+                    rules={[{ required: true, message: "Please enter courses description" }]}
                 >
-                    <Input placeholder="e.g john@email.com" />
+                    <Input placeholder="e.g Detailed description" />
                 </Form.Item>
-                <Form.List name="skills">
-                    {(fields, { add, remove }) => (
-                        <>
-                            {fields.map((field, index) => (
-                                <Space key={field.key} direction="horizontal" style={{ display: 'flex', marginBottom: 8 }}>
-                                    <Form.Item
-                                        {...field}
-                                        name={[field.name]}
-                                        label={`Skill - ${index + 1}`}
-                                        style={{ width: "400px" }}
-                                        rules={[{ required: true, message: "Please enter a skill" }]}
-                                    >
-                                        <Input placeholder="e.g. JavaScript" />
-                                    </Form.Item>
-                                    <Button
-                                        danger
-                                        onClick={() => remove(field.name)}
-                                        icon={<DeleteOutlined />}
-                                    />
-                                </Space>
-                            ))}
-                            <Form.Item>
-                                <Button
-                                    type="dashed"
-                                    onClick={() => add()}
-                                    icon={<PlusOutlined />}
-                                    block
-                                    style={{ maxWidth: "893px" }}
-                                >
-                                    Add a skill
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form.List>
+
+                <Form.Item
+                    name="companyName"
+                    label="Company Name"
+                    style={{ maxWidth: "893px" }}
+                    rules={[{ required: true, message: "Please enter Company name" }]}
+                >
+                    <Input placeholder="e.g Company name" />
+                </Form.Item>
+
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
                         Save

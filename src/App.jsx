@@ -18,6 +18,7 @@ import CourseDetail from "./Components/UsersHandle/CourseDetail.jsx";
 
 
 import CoursItems from "./Components/Moderator/CoursItems.jsx";
+import OneCoursePage from "./Components/Moderator/CourseOnePage.jsx";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
@@ -65,8 +66,7 @@ const App = () => {
                     ) : (
                         <>
                             <Route exact path="/courses" element={<CoursItems />} />
-
-                            {/*<Route exact path="/create" element={<CreateCourses />} />*/}
+                            <Route exact path="/courses/:id" element={<OneCoursePage />} />
                             <Route exact path="/mod" element={<Moderators />} />
                             <Route exact path="/users" element={<Users />} />
                             <Route exact path="/" element={<AboutUs />} />

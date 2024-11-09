@@ -1,14 +1,17 @@
 import axios from "axios";
-
+import authService from "./auth.service.js";
 const API_URL = "http://localhost:8000/api/v1/courses";
 
-// Создание нового курса
 const create = async (name, description, companyName) => {
     try {
+        const moderator=authService.getCurrentUser()
+        const moderatorId= moderator.id;
         const response = await axios.post(API_URL, {
             name,
             description,
-            companyName
+            companyName,
+            moderatorId
+
         });
         return response.data;
     } catch (error) {
@@ -53,9 +56,10 @@ const getAll = async () => {
 };
 
 
-const getCourseById = async (courseId) => {
+const getCourseById = async (id) => {
+
     try {
-        const response = await axios.get(`${API_URL}/${courseId}`);
+        const response = await axios.get(`${API_URL}/${id}`);
         return response.data;
     } catch (error) {
         console.error(`Ошибка при получении курса с ID ${courseId}:`, error);

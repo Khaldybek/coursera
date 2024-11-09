@@ -4,7 +4,7 @@ import CoursItem from './CoursItem';
 import CoursesService from "../../services/courses.service.js";
 import "./Style/Courses.css"
 import {PlusSquareOutlined} from "@ant-design/icons";
-
+import CreateCourses from "./CreateCourses";
 import InputOTPPage from "../InputOTPPage.jsx";
 const CoursItems = () => {
 
@@ -40,7 +40,7 @@ const CoursItems = () => {
             <Modal  open={modal} onCancel={() => {
                 setModal(false);
             }}  footer={null}>
-                gfbfbf
+                <CreateCourses/>
             </Modal>
 
             <FloatButton
