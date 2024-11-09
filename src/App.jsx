@@ -13,6 +13,7 @@ import BoardUser from "./Components/BoardUser.jsx";
 import BoardModerator from "./Components/BoardModerator.jsx";
 import BoardAdmin from "./Components/BoardAdmin.jsx";
 import Users from "./Components/Admin/Users.jsx";
+import CreateCourses from "./Components/Moderator/CreateCourses.jsx";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
@@ -59,6 +60,7 @@ const App = () => {
                         </>
                     ) : (
                         <>
+                            <Route exact path="/create" element={<CreateCourses />} />
                             <Route exact path="/mod" element={<Moderators />} />
                             <Route exact path="/users" element={<Users />} />
                             <Route exact path="/" element={<AboutUs />} />
