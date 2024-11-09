@@ -13,6 +13,10 @@ import BoardUser from "./Components/BoardUser.jsx";
 import BoardModerator from "./Components/BoardModerator.jsx";
 import BoardAdmin from "./Components/BoardAdmin.jsx";
 import Users from "./Components/Admin/Users.jsx";
+import UsersCourse from "./Components/UsersHandle/UsersCourse";
+import CourseDetail from "./Components/UsersHandle/CourseDetail.jsx";
+
+
 import CoursItems from "./Components/Moderator/CoursItems.jsx";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
@@ -69,8 +73,13 @@ const App = () => {
                             <Route exact path="/home" element={<Home />} />
                             <Route exact path="/profile" element={<Profile />} />
                             <Route path="/user" element={<BoardUser />} />
+                            <Route path="/my-courses" element={<UsersCourse />} />
+                            <Route path="/my-courses/:courseId" element={<CourseDetail />} />
                             {showModeratorBoard && (
+                                <>
                                 <Route path="/mod" element={<BoardModerator />} />
+                                {/*<Route path="/my-courses" element={<UsersCourse />} />*/}
+                                </>
                             )}
                             {showAdminBoard && (
                                 <Route path="/admin" element={<BoardAdmin />} />

@@ -17,6 +17,30 @@ const create = async (name, description, companyName) => {
     }
 };
 
+
+const getSubscribedCourses = (userId) => {
+    console.log(`Fetching subscribed courses for courseId: ${userId}`);
+    return axios.get(`${API_URL}/${userId}/subscribed-courses`, {
+        headers: {
+            "Accept": "*/*"
+        }
+    })
+        .then(response => {
+            console.log("Subscribed courses retrieved successfully:", response.data);
+            return response;
+        })
+        .catch(error => {
+            console.error("Error fetching subscribed courses:", error);
+            throw error;
+        });
+};
+
+
+const getCurrentUser = () => {
+    return JSON.parse(localStorage.getItem("user"));
+};
+
+
 // Получение всех курсов
 const getAll = async () => {
     try {
@@ -28,9 +52,23 @@ const getAll = async () => {
     }
 };
 
+
+const getCourseById = async (courseId) => {
+    try {
+        const response = await axios.get(`${API_URL}/${courseId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Ошибка при получении курса с ID ${courseId}:`, error);
+        throw error;
+    }
+};
+
 const CoursesService = {
     create,
     getAll,
+    getSubscribedCourses,
+    getCurrentUser,
+    getCourseById
 };
 
 export default CoursesService;

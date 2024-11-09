@@ -8,10 +8,12 @@ import {
     IdcardOutlined
 } from "@ant-design/icons";
 import AuthService from "../../services/auth.service.js";
+import { useNavigate } from 'react-router-dom';
 
 const MenuList = () => {
     const user = AuthService.getCurrentUser();
     const role = user.ROLE;
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         AuthService.logout();
@@ -28,9 +30,10 @@ const MenuList = () => {
                 icon: <SwitcherOutlined style={{ fontSize: "20px" }} />
             },
             {
-                label: "Опрос",
-                key: "survey",
-                icon: <ProfileOutlined style={{ fontSize: "20px" }} />
+                label: "Мой курсы",
+                key: "my-courses",
+                icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate('/my-courses')
             }
         ] : []),
         ...(role === "MODERATOR" ? [

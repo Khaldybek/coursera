@@ -6,8 +6,16 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import springBootLogo from '../../Style/imeg/2bf1422598e3129ec9052c560640d366.jpg';
+import {useNavigate} from "react-router-dom";
 
-export default function CoursItem({ data }) {
+export default function UserCoursItem({ data }) {
+    const navigate = useNavigate();
+
+    const handleLearnMore = (courseId) => {
+        navigate(`/my-courses/${courseId}`);
+    };
+
+
     return (
         <Card sx={{
             minWidth: 250,
@@ -39,7 +47,7 @@ export default function CoursItem({ data }) {
                 </Typography>
             </CardContent>
             <CardActions sx={{ padding: '16px', justifyContent: 'center' }}>
-                <Button size="small" variant="contained" color="primary">
+                <Button size="small" variant="contained" color="primary" onClick={() => handleLearnMore(data.id)} >
                     Learn More
                 </Button>
             </CardActions>
