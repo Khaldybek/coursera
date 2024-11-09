@@ -79,7 +79,10 @@ const Register = () => {
 
     return (
         <>
-            <Modal title="Basic Modal" open={modal} onOk={handleOk} onCancel={handleCancel}>
+            <Modal  open={modal} onCancel={() => {
+                handleCancel();
+                window.location.reload();
+            }}  footer={null}>
                 <InputOTPPage email={email}/>
             </Modal>
             <section style={styles.section}>

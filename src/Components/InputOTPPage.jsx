@@ -27,7 +27,7 @@ const InputOTPPage = ({email}) => {
     return (
         <main className="app">
             <section className="card">
-                <h2>Uncontrolled</h2>
+                <h2>Проверте почту</h2>
                 <Form form={form} onFinish={handleFinish}>
                     <Form.Item
                         name="otp"
