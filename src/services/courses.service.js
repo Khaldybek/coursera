@@ -62,7 +62,7 @@ const getCourseById = async (id) => {
         const response = await axios.get(`${API_URL}/${id}`);
         return response.data;
     } catch (error) {
-        console.error(`Ошибка при получении курса с ID ${courseId}:`, error);
+        console.error(`Ошибка при получении курса с ID ${id}:`, error);
         throw error;
     }
 };
@@ -72,7 +72,8 @@ const CoursesService = {
     getAll,
     getSubscribedCourses,
     getCurrentUser,
-    getCourseById
+    getCourseById,
 };
 
 export default CoursesService;
+
