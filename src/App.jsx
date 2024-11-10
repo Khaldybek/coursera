@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate ,Navigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AboutUs from "./Components/AboutUs.jsx";
@@ -64,6 +64,7 @@ const App = () => {
                             <Route exact path="/" element={<Login />} />
                             <Route exact path="/login" element={<Login />} />
                             <Route exact path="/register" element={<Register />} />
+                            <Route path="*" element={<Navigate to="/login" replace />} />
                         </>
                     ) : (
                         <>

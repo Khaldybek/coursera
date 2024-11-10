@@ -1,4 +1,4 @@
-import { Menu } from 'antd';
+import { Modal, Menu } from 'antd';
 import {
     ProfileOutlined,
     PlusSquareOutlined,
@@ -9,16 +9,26 @@ import {
 } from "@ant-design/icons";
 import AuthService from "../../services/auth.service.js";
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const MenuList = () => {
     const user = AuthService.getCurrentUser();
     const role = user.ROLE;
     const navigate = useNavigate();
+    const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
 
     const handleLogout = () => {
         AuthService.logout();
         localStorage.removeItem("user");
         window.location.reload();
+    };
+
+    const showLogoutModal = () => {
+        setIsLogoutModalVisible(true);
+    };
+
+    const handleCancelLogout = () => {
+        setIsLogoutModalVisible(false);
     };
 
     // Определяем элементы меню в зависимости от роли
@@ -52,25 +62,40 @@ const MenuList = () => {
             {
                 label: "Пользователи",
                 key: "users",
-                icon: <TeamOutlined style={{ fontSize: "20px" }} />
+                icon: <TeamOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate("/users"),
             },
             {
                 label: "Модераторы",
                 key: "moderators",
-                icon: <IdcardOutlined style={{ fontSize: "20px" }} />
+                icon: <IdcardOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate("/mod"),
             }
         ] : []),
         {
             label: "Выйти",
             key: "logout",
             icon: <LogoutOutlined style={{ fontSize: "20px" }} />,
-            onClick: handleLogout,
+            onClick: showLogoutModal,
             style: { marginTop: 'auto', marginBottom: '20px' }
         }
     ];
 
     return (
-        <Menu theme="dark" className="menuList" items={items} />
+        <>
+            <Menu theme="dark" className="menuList" items={items} />
+
+            <Modal
+                title="Подтвердите выход"
+                visible={isLogoutModalVisible}
+                onOk={handleLogout}
+                onCancel={handleCancelLogout}
+                okText="Да, выйти"
+                cancelText="Отмена"
+            >
+                <p>Вы уверены, что хотите выйти?</p>
+            </Modal>
+        </>
     );
 };
 
