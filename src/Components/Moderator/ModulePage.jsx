@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {Card, Typography, List, Descriptions, Spin, notification, Modal, FloatButton} from 'antd';
+import { useParams, Link } from 'react-router-dom';
+import { Card, Typography, List, Descriptions, Spin, notification, Modal, FloatButton } from 'antd';
 import ModulesService from '../../services/modules.service.js';
-import {PlusSquareOutlined} from "@ant-design/icons";
+import { PlusSquareOutlined } from "@ant-design/icons";
 import CreateLesson from "./CreateLesson.jsx";
+import "./Style/CourseOnePage.css";
+
 const { Title, Text } = Typography;
 
 export default function ModulePage() {
-    const { id, moduleId } = useParams();  // Получаем id курса и moduleId из параметров URL
+    const { id, moduleId } = useParams(); // Получаем id курса и moduleId из параметров URL
     const [module, setModule] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [modal, setModal] = useState();
+    const [modal, setModal] = useState(false); // Инициализация как false
+
     useEffect(() => {
         fetchModule();
     }, [moduleId]);  // Загрузить данные при изменении moduleId
@@ -69,9 +72,13 @@ export default function ModulePage() {
                     bordered
                     dataSource={module.lessons || []}
                     renderItem={(lesson) => (
-                        <List.Item key={lesson.id} style={{ padding: '10px 20px' }}>
+                        <List.Item key={lesson.id} className="module-item">
                             <List.Item.Meta
-                                title={<Text strong>{lesson.name}</Text>}
+                                title={
+                                    <Link to={`/courses/${id}/modules/${moduleId}/lessons/${lesson.id}`}>
+                                        <Text strong>{lesson.name}</Text>
+                                    </Link>
+                                }
                                 description={lesson.description}
                             />
                         </List.Item>
@@ -79,15 +86,16 @@ export default function ModulePage() {
                     style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden' }}
                 />
             </Card>
+
             <Modal open={modal} onCancel={() => setModal(false)} footer={null}>
-                    <CreateLesson moduleId={moduleId} />
+                <CreateLesson moduleId={moduleId} />
             </Modal>
 
             <FloatButton
                 icon={<PlusSquareOutlined />}
                 theme="dark"
                 type="primary"
-                tooltip={<div>Добавить модуль</div>}
+                tooltip={<div>Добавить урок</div>}
                 onClick={() => setModal(true)}
                 style={{
                     right: 24,

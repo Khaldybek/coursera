@@ -16,9 +16,10 @@ import Users from "./Components/Admin/Users.jsx";
 import UsersCourse from "./Components/UsersHandle/UsersCourse";
 import CourseDetail from "./Components/UsersHandle/CourseDetail.jsx";
 import ModulePage from "./Components/Moderator/ModulePage.jsx";
-
+import LessonPage from "./Components/Moderator/LessonPage.jsx";
 import CoursItems from "./Components/Moderator/CoursItems.jsx";
 import OneCoursePage from "./Components/Moderator/CourseOnePage.jsx";
+import TopicPage from "./Components/Moderator/TopicPage.jsx";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
@@ -85,6 +86,9 @@ const App = () => {
                                     <Route exact path="/courses" element={<CoursItems />} />
                                     <Route exact path="/courses/:id" element={<OneCoursePage />} />
                                     <Route exact path="/courses/:id/module/:moduleId" element={<ModulePage />} />
+                                    <Route path="/courses/:id/modules/:moduleId/lessons/:lessonId" element={<LessonPage />} />
+                                    <Route path="/courses/:id/modules/:moduleId/lessons/:lessonId/topics/:topicId" element={<TopicPage />} />
+                                    <Route path="*" element={<Navigate to="/courses" replace />} />
                                 </>
                             )}
                             {showAdminBoard && (

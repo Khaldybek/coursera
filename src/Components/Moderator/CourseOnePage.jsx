@@ -4,7 +4,7 @@ import { Card, Button, Typography, List, Descriptions, Spin, FloatButton, Modal,
 import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
 import CoursesService from '../../services/courses.service.js';
 import CreateModule from './CreateModule.jsx';
-
+import "./Style/CourseOnePage.css"
 const { Title, Text } = Typography;
 
 export default function OneCoursePage() {
@@ -90,7 +90,7 @@ export default function OneCoursePage() {
                     renderItem={(module) => (
                         <List.Item
                             key={module.id}
-                            style={{ padding: '10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                            className="module-item"
                         >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Link

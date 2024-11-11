@@ -55,7 +55,8 @@ const MenuList = () => {
             {
                 label: "Мои Курсы",
                 key: "survey",
-                icon: <ProfileOutlined style={{ fontSize: "20px" }} />
+                icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate("/courses"),
             }
         ] : []),
         ...(role === "ADMIN" ? [
