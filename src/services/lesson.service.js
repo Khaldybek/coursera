@@ -1,10 +1,9 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:8000/api/v1/lessons";
+const API_URL_BASE = "http://localhost:8000/api";
 
-// Функция для создания урока
 const createLesson = async (moduleId, lessonName, lessonDescription, level) => {
-    console.log(lessonDescription, moduleId, lessonName, lessonDescription);
     try {
         const response = await axios.post(
             `${API_URL}/${moduleId}`,
@@ -34,9 +33,21 @@ const deleteLesson = async (lessonId) => {
     }
 };
 
+const getTopicsByLesson = async (lessonId) => {
+    try {
+        const response = await axios.get(`${API_URL_BASE}/topics/by-lesson/${lessonId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching topics by lesson:", error);
+        throw error;
+    }
+};
+
+
 const LessonService = {
     createLesson,
     deleteLesson,
+    getTopicsByLesson
 };
 
 export default LessonService;

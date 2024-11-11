@@ -1,6 +1,7 @@
 import axios from "axios";
 import authService from "./auth.service.js";
 const API_URL = "http://localhost:8000/api/v1/courses";
+const API_BASE_URL = "http://localhost:8000/api/v1/lessons";
 
 const create = async (name, description, companyName) => {
     try {
@@ -67,12 +68,24 @@ const getCourseById = async (id) => {
     }
 };
 
+const getUserModuleById = async (moduleId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/module/${moduleId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching module details for module ID ${moduleId}:`, error);
+        throw error;
+    }
+};
+
+
 const CoursesService = {
     create,
     getAll,
     getSubscribedCourses,
     getCurrentUser,
     getCourseById,
+    getUserModuleById
 };
 
 export default CoursesService;

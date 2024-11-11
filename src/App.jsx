@@ -17,9 +17,12 @@ import UsersCourse from "./Components/UsersHandle/UsersCourse";
 import CourseDetail from "./Components/UsersHandle/CourseDetail.jsx";
 import ModulePage from "./Components/Moderator/ModulePage.jsx";
 import LessonPage from "./Components/Moderator/LessonPage.jsx";
+import ModuleDetailLesson from "./Components/UsersHandle/ModuleDetailLesson.jsx";
 import CoursItems from "./Components/Moderator/CoursItems.jsx";
 import OneCoursePage from "./Components/Moderator/CourseOnePage.jsx";
 import TopicPage from "./Components/Moderator/TopicPage.jsx";
+import LessonDetail from "./Components/UsersHandle/LessonDetail.jsx";
+
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
@@ -69,17 +72,19 @@ const App = () => {
                         </>
                     ) : (
                         <>
+                            <Route exact path="/courses" element={<CoursItems />} />
+                            <Route exact path="/courses/:id" element={<OneCoursePage />} />
+                            <Route exact path="/mod" element={<Moderators />} />
+                            <Route exact path="/users" element={<Users />} />
+                            <Route exact path="/" element={<AboutUs />} />
+                            <Route exact path="/home" element={<Home />} />
+                            <Route exact path="/profile" element={<Profile />} />
+                            <Route path="/user" element={<BoardUser />} />
+                            <Route path="/my-courses" element={<UsersCourse />} />
 
-                            {showUserBoard && (
-                                <>
-                                    <Route exact path="/" element={<AboutUs />} />
-                                    <Route exact path="/home" element={<Home />} />
-                                    <Route exact path="/profile" element={<Profile />} />
-                                    <Route path="/user" element={<BoardUser />} />
-                                    <Route path="/my-courses" element={<UsersCourse />} />
-                                    <Route path="/my-courses/:courseId" element={<CourseDetail />} />
-                                </>
-                            )}
+                            <Route path="/my-courses/:courseId" element={<CourseDetail />} />
+                            <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
+                            <Route path="/lesson/:lessonId" element={<LessonDetail />} />
                             {showModeratorBoard && (
                                 <>
                                     <Route path="/mod" element={<BoardModerator />} />

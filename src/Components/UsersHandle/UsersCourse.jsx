@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Grid, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress, Grid, Card, CardContent, Typography } from "@mui/material";
 import CourseService from "../../services/courses.service.js";
-import UserCoursItem from "./UserCoursItem.jsx";
 
 const UsersCourse = () => {
     const [courses, setCourses] = useState([]);
@@ -26,7 +25,9 @@ const UsersCourse = () => {
         }
     }, []);
 
-
+    const handleCourseClick = (courseId) => {
+        navigate(`/my-courses/${courseId}`);
+    };
 
     return (
         <div className="courses-container">
@@ -36,7 +37,25 @@ const UsersCourse = () => {
                 <Grid container spacing={2} justifyContent="center">
                     {courses.map((course, index) => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                            <UserCoursItem data={course} />
+                            <Card
+                                sx={{
+                                    width: 300,
+                                    height: 200,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    boxShadow: 3,
+                                    cursor: 'pointer',
+                                    ':hover': { boxShadow: 6 },
+                                }}
+                                onClick={() => handleCourseClick(course.id)}
+                            >
+                                <CardContent sx={{ paddingRight: '9px'}}>
+                                    <Typography padding={1} variant="h5">{course.name}</Typography>
+                                    <Typography variant="h7" color="text.secondary">
+                                        {course.description}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         </Grid>
                     ))}
                 </Grid>
