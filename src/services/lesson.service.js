@@ -1,6 +1,9 @@
 import axios from "axios";
+
 const API_URL = "http://localhost:8000/api/v1/lessons";
-const createLesson = async (moduleId, lessonName, lessonDescription) => {
+
+// Функция для создания урока
+const createLesson = async (moduleId, lessonName, lessonDescription, level) => {
     console.log(lessonDescription, moduleId, lessonName, lessonDescription);
     try {
         const response = await axios.post(
@@ -10,6 +13,7 @@ const createLesson = async (moduleId, lessonName, lessonDescription) => {
                 params: {
                     lessonName,
                     lessonDescription,
+                    level,
                 }
             }
         );
@@ -19,7 +23,20 @@ const createLesson = async (moduleId, lessonName, lessonDescription) => {
         throw error;
     }
 };
-const LessonService = {
-    createLesson
+
+const deleteLesson = async (lessonId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${lessonId}`);
+        return response.data;
+    } catch (error) {
+        console.log("Error deleting lesson:", error);
+        throw error;
+    }
 };
+
+const LessonService = {
+    createLesson,
+    deleteLesson,
+};
+
 export default LessonService;

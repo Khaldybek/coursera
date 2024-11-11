@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom'; // Импортируем Link для создания ссылок
-import { Card, Typography, List, Spin, notification } from 'antd';
+import { useParams, Link } from 'react-router-dom';
+import { Card, Typography, List, Spin, notification, Modal, Button, Popconfirm, Input } from 'antd';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import TopicService from "../../services/topic.service.js"; // Предположим, у нас есть TopicService для работы с API тем
 
 const { Title, Text } = Typography;
 
@@ -9,6 +11,12 @@ export default function LessonPage() {
     const [lesson, setLesson] = useState(null);
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [newTopic, setNewTopic] = useState({
+        name: '',
+        description: '',
+        title: '',
+    });
 
     useEffect(() => {
         fetchLessonData();
@@ -36,6 +44,40 @@ export default function LessonPage() {
         }
     };
 
+    const handleCreateTopic = async () => {
+        try {
+            const response = await TopicService.createTopic(lessonId, newTopic.name,newTopic.description,newTopic.title);
+            setTopics(prev => [...prev, response]);
+            setModalVisible(false);
+            notification.success({
+                message: "Тема добавлена",
+                description: `Тема "${newTopic.name}" успешно добавлена.`,
+            });
+            setNewTopic({ name: '', description: '', title: '' }); // Сброс формы
+        } catch (error) {
+            notification.error({
+                message: "Ошибка при добавлении темы",
+                description: "Не удалось добавить тему. Попробуйте снова.",
+            });
+        }
+    };
+
+    const handleDeleteTopic = async (topicId) => {
+        try {
+            await TopicService.deleteTopic(topicId);
+            setTopics(prev => prev.filter(topic => topic.id !== topicId));
+            notification.success({
+                message: "Тема удалена",
+                description: `Тема успешно удалена.`,
+            });
+        } catch (error) {
+            notification.error({
+                message: "Ошибка удаления темы",
+                description: "Не удалось удалить тему.",
+            });
+        }
+    };
+
     if (loading) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f0f2f5' }}>
@@ -59,7 +101,7 @@ export default function LessonPage() {
                     bordered
                     dataSource={topics}
                     renderItem={(topic) => (
-                        <List.Item key={topic.id}>
+                        <List.Item key={topic.id} style={{ padding: '12px', marginBottom: '8px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)' }}>
                             <List.Item.Meta
                                 title={
                                     <Link to={`/courses/${id}/modules/${moduleId}/lessons/${lessonId}/topics/${topic.id}`} style={{ color: '#1890ff', fontWeight: 'bold' }}>
@@ -68,11 +110,68 @@ export default function LessonPage() {
                                 }
                                 description={topic.description || "Нет описания"}
                             />
+                            <Popconfirm
+                                title="Удалить тему?"
+                                description="Вы уверены, что хотите удалить эту тему?"
+                                onConfirm={() => handleDeleteTopic(topic.id)}
+                                okText="Да"
+                                cancelText="Нет"
+                            >
+                                <DeleteOutlined style={{ color: 'red', fontSize: '18px' }} />
+                            </Popconfirm>
                         </List.Item>
                     )}
                     style={{ borderRadius: '8px', overflow: 'hidden' }}
                 />
+
+                <Modal
+                    title="Добавить новую тему"
+                    visible={modalVisible}
+                    onCancel={() => setModalVisible(false)}
+                    footer={[
+                        <Button key="cancel" onClick={() => setModalVisible(false)}>
+                            Отмена
+                        </Button>,
+                        <Button key="submit" type="primary" onClick={handleCreateTopic}>
+                            Добавить
+                        </Button>,
+                    ]}
+                >
+                    <Input
+                        value={newTopic.name}
+                        onChange={(e) => setNewTopic(prev => ({ ...prev, name: e.target.value }))}
+                        placeholder="Название темы"
+                        style={{ marginBottom: '10px' }}
+                    />
+                    <Input
+                        value={newTopic.description}
+                        onChange={(e) => setNewTopic(prev => ({ ...prev, description: e.target.value }))}
+                        placeholder="Описание темы"
+                        style={{ marginBottom: '10px' }}
+                    />
+                    <Input
+                        value={newTopic.title}
+                        onChange={(e) => setNewTopic(prev => ({ ...prev, title: e.target.value }))}
+                        placeholder="Заголовок"
+                    />
+                </Modal>
             </Card>
+
+            <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                style={{
+                    position: 'fixed',
+                    bottom: '24px',
+                    right: '24px',
+
+
+
+                }}
+                onClick={() => setModalVisible(true)}
+            >
+                Добавить тему
+            </Button>
         </div>
     );
 }

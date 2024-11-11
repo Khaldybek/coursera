@@ -1,27 +1,29 @@
 import React, { useState } from "react";
 import { Form, Input, Button, notification } from "antd";
 import LessonService from "../../services/lesson.service.js";
-export default function CreateLesson({ moduleId  }) {  // Деструктуризация пропса id
+
+export default function CreateLesson({ moduleId, addLessonToModule, onClose }) {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
 
     const handleSave = async (values) => {
         setLoading(true);
         try {
-            await LessonService.createLesson(moduleId ,values.lessonName,values.lessonDescription)
-
+            // Добавляем урок через API
+            const newLesson = await LessonService.createLesson(moduleId, values.lessonName, values.lessonDescription, values.level);
+            // Добавляем урок в родительский компонент
+            addLessonToModule(newLesson);
             notification.success({
-                message: "Модуль успешно создан",
-                description: `Модуль "${values.moduleName}" был успешно добавлен.`,
-
+                message: "Урок успешно создан",
+                description: `Урок "${values.lessonName}" был успешно добавлен.`,
             });
-
             form.resetFields();
-            window.location.reload()
+            // Закрываем модальное окно после добавления
+            onClose();
         } catch (error) {
             notification.error({
-                message: "Ошибка при создании модуля",
-                description: error?.response?.data?.message || "Произошла ошибка при создании модуля. Попробуйте снова.",
+                message: "Ошибка при создании урока",
+                description: error?.response?.data?.message || "Произошла ошибка при создании урока. Попробуйте снова.",
             });
         } finally {
             setLoading(false);
@@ -33,17 +35,25 @@ export default function CreateLesson({ moduleId  }) {  // Деструктури
             <Form form={form} layout="vertical" onFinish={handleSave}>
                 <Form.Item
                     name="lessonName"
-                    label="Lesson Name"  // Исправлено на правильный текст
-                    rules={[{ required: true, message: "Please enter the Module Name" }]}
+                    label="Lesson Name"
+                    rules={[{ required: true, message: "Please enter the Lesson Name" }]}
                 >
                     <Input placeholder="e.g. Java Basics" />
                 </Form.Item>
                 <Form.Item
                     name="lessonDescription"
-                    label="Lesson Description"  // Исправлено на правильный текст
-                    rules={[{ required: true, message: "Please enter the Module Name" }]}
+                    label="Lesson Description"
+                    rules={[{ required: true, message: "Please enter the Lesson Description" }]}
                 >
-                    <Input placeholder="e.g. Java Basics" />
+                    <Input placeholder="e.g. Introduction to Java" />
+                </Form.Item>
+
+                <Form.Item
+                    name="level"
+                    label="Level"
+                    rules={[{ required: true, message: "Please enter the Lesson Level" }]}
+                >
+                    <Input placeholder="e.g. Beginner" />
                 </Form.Item>
 
                 <Form.Item>

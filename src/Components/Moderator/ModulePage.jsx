@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Card, Typography, List, Descriptions, Spin, notification, Modal, FloatButton } from 'antd';
+import { Card, Typography, List, Descriptions, Spin, notification, Modal, FloatButton, Popconfirm, Tag } from 'antd';
 import ModulesService from '../../services/modules.service.js';
-import { PlusSquareOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined, DeleteOutlined } from "@ant-design/icons";
 import CreateLesson from "./CreateLesson.jsx";
 import "./Style/CourseOnePage.css";
-
+import LessonService from "../../services/lesson.service.js";
 const { Title, Text } = Typography;
 
 export default function ModulePage() {
-    const { id, moduleId } = useParams(); // Получаем id курса и moduleId из параметров URL
+    const { id, moduleId } = useParams();
     const [module, setModule] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [modal, setModal] = useState(false); // Инициализация как false
+    const [modal, setModal] = useState(false);
 
     useEffect(() => {
         fetchModule();
-    }, [moduleId]);  // Загрузить данные при изменении moduleId
+    }, [moduleId]);
 
     const fetchModule = async () => {
         setLoading(true);
         try {
-            const response = await ModulesService.getModuleById(moduleId); // Используем moduleId для получения данных
+            const response = await ModulesService.getModuleById(moduleId);
             if (response) {
                 setModule(response);
             } else {
@@ -39,6 +39,33 @@ export default function ModulePage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDeleteLesson = async (lessonId) => {
+        try {
+            await LessonService.deleteLesson(lessonId);
+            setModule((prev) => ({
+                ...prev,
+                lessons: prev.lessons.filter((lesson) => lesson.id !== lessonId),
+            }));
+            notification.success({
+                message: "Урок удалён",
+                description: `Урок успешно удалён.`,
+            });
+        } catch (error) {
+            console.error("Ошибка при удалении урока:", error);
+            notification.error({
+                message: "Ошибка удаления",
+                description: "Не удалось удалить урок.",
+            });
+        }
+    };
+
+    const addLessonToModule = (newLesson) => {
+        setModule((prev) => ({
+            ...prev,
+            lessons: [...prev.lessons, newLesson],
+        }));
     };
 
     if (loading) {
@@ -72,14 +99,29 @@ export default function ModulePage() {
                     bordered
                     dataSource={module.lessons || []}
                     renderItem={(lesson) => (
-                        <List.Item key={lesson.id} className="module-item">
+                        <List.Item key={lesson.id} className="module-item" actions={[
+                            <Popconfirm
+                                title="Удалить урок"
+                                description="Вы уверены, что хотите удалить этот урок?"
+                                onConfirm={() => handleDeleteLesson(lesson.id)}
+                                okText="Да"
+                                cancelText="Нет"
+                            >
+                                <DeleteOutlined style={{ color: 'red' }} />
+                            </Popconfirm>
+                        ]}>
                             <List.Item.Meta
                                 title={
                                     <Link to={`/courses/${id}/modules/${moduleId}/lessons/${lesson.id}`}>
                                         <Text strong>{lesson.name}</Text>
                                     </Link>
                                 }
-                                description={lesson.description}
+                                description={
+                                    <>
+                                        <p>{lesson.description}</p>
+                                        <Tag color={getLevelColor(lesson.level)}>{lesson.level}</Tag>
+                                    </>
+                                }
                             />
                         </List.Item>
                     )}
@@ -88,7 +130,7 @@ export default function ModulePage() {
             </Card>
 
             <Modal open={modal} onCancel={() => setModal(false)} footer={null}>
-                <CreateLesson moduleId={moduleId} />
+                <CreateLesson moduleId={moduleId} addLessonToModule={addLessonToModule} onClose={() => setModal(false)} />
             </Modal>
 
             <FloatButton
@@ -105,3 +147,15 @@ export default function ModulePage() {
         </div>
     );
 }
+
+// Функция для определения цвета тега по числовому уровню
+const getLevelColor = (level) => {
+    if (level >= 1 && level <= 3) {
+        return 'green'; // Легкий уровень
+    } else if (level >= 4 && level <= 7) {
+        return 'orange'; // Средний уровень
+    } else if (level >= 8 && level <= 10) {
+        return 'red'; // Сложный уровень
+    }
+    return 'blue'; // Для неопределенного уровня
+};
