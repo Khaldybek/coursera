@@ -37,7 +37,8 @@ const MenuList = () => {
             {
                 label: "Курсы",
                 key: "courses",
-                icon: <SwitcherOutlined style={{ fontSize: "20px" }} />
+                icon: <SwitcherOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate('/courses')
             },
             {
                 label: "Мой курсы",

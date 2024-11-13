@@ -47,9 +47,12 @@ const getCurrentUser = () => {
 
 // Получение всех курсов
 const getAll = async () => {
+    console.log(`Ayoooom`);
     try {
         const response = await axios.get(API_URL);
+        console.log(response.data);
         return response.data;
+
     } catch (error) {
         console.error("Ошибка при получении курсов:", error);
         throw error;

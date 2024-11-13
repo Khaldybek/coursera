@@ -35,7 +35,7 @@ const App = () => {
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
-
+        console.log(user);
         if (user) {
             setCurrentUser(user);
             setShowModeratorBoard(user.ROLE.includes("MODERATOR"));
@@ -77,14 +77,12 @@ const App = () => {
                         <>
                             {showUserBoard && (
                                 <>
-                                    <Route path="/courses" element={<CoursItems />} />
-                                    <Route path="/courses/:id" element={<OneCoursePage />} />
-                                    <Route path="/mod" element={<Moderators />} />
-                                    <Route path="/users" element={<Users />} />
-                                    <Route path="/" element={<AboutUs />} />
-                                    <Route path="/home" element={<Home />} />
-                                    <Route path="/profile" element={<Profile />} />
-                                    <Route path="/user" element={<BoardUser />} />
+
+                                    {/*<Route path="/users" element={<Users />} />*/}
+                                    {/*<Route path="/" element={<AboutUs />} />*/}
+                                    {/*<Route path="/home" element={<Home />} />*/}
+                                    {/*<Route path="/profile" element={<Profile />} />*/}
+                                    {/*<Route path="/user" element={<BoardUser />} />*/}
                                     <Route path="/my-courses" element={<UsersCourse />} />
                                     <Route path="/my-courses/:courseId" element={<CourseDetail />} />
                                     <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
