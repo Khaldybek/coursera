@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate ,Navigate} from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AboutUs from "./Components/AboutUs.jsx";
@@ -22,17 +22,17 @@ import CoursItems from "./Components/Moderator/CoursItems.jsx";
 import OneCoursePage from "./Components/Moderator/CourseOnePage.jsx";
 import TopicPage from "./Components/Moderator/TopicPage.jsx";
 import LessonDetail from "./Components/UsersHandle/LessonDetail.jsx";
-
-// import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
+
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [showUserBoard, setShowUserBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
-    console.log(currentUser);
+
     const navigate = useNavigate();
+
     useEffect(() => {
         const user = AuthService.getCurrentUser();
 
@@ -40,8 +40,9 @@ const App = () => {
             setCurrentUser(user);
             setShowModeratorBoard(user.ROLE.includes("MODERATOR"));
             setShowAdminBoard(user.ROLE.includes("ADMIN"));
-            setShowUserBoard(user.ROLE.includes("USER"))
+            setShowUserBoard(user.ROLE.includes("USER"));
         }
+
         EventBus.on("logout", () => {
             logOut();
         });
@@ -55,42 +56,47 @@ const App = () => {
         AuthService.logout();
         setShowModeratorBoard(false);
         setShowAdminBoard(false);
+        setShowUserBoard(false);
         setCurrentUser(undefined);
         navigate("/login"); // Перенаправление на логин после выхода
     };
+
     return (
         <div className="mainDisplay">
-            {currentUser &&<Navbar /> }
-            <div className="container mt-3" style={{ margin: 0, padding: 0 ,display:"flex" ,justifyContent:"center" }}>
+            {currentUser && <Navbar />}
+            <div className="container mt-3" style={{ margin: 0, padding: 0, display: "flex", justifyContent: "center" }}>
                 <Routes>
                     {!currentUser ? (
                         <>
-                            <Route exact path="/" element={<Login />} />
-                            <Route exact path="/login" element={<Login />} />
-                            <Route exact path="/register" element={<Register />} />
-                            <Route path="*" element={<Navigate to="/login" replace />} />
+                            <Route path="/" element={<Login />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="*" element={<Login />} />
                         </>
                     ) : (
                         <>
-                            <Route exact path="/courses" element={<CoursItems />} />
-                            <Route exact path="/courses/:id" element={<OneCoursePage />} />
-                            <Route exact path="/mod" element={<Moderators />} />
-                            <Route exact path="/users" element={<Users />} />
-                            <Route exact path="/" element={<AboutUs />} />
-                            <Route exact path="/home" element={<Home />} />
-                            <Route exact path="/profile" element={<Profile />} />
-                            <Route path="/user" element={<BoardUser />} />
-                            <Route path="/my-courses" element={<UsersCourse />} />
-
-                            <Route path="/my-courses/:courseId" element={<CourseDetail />} />
-                            <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
-                            <Route path="/lesson/:lessonId" element={<LessonDetail />} />
+                            {showUserBoard && (
+                                <>
+                                    <Route path="/courses" element={<CoursItems />} />
+                                    <Route path="/courses/:id" element={<OneCoursePage />} />
+                                    <Route path="/mod" element={<Moderators />} />
+                                    <Route path="/users" element={<Users />} />
+                                    <Route path="/" element={<AboutUs />} />
+                                    <Route path="/home" element={<Home />} />
+                                    <Route path="/profile" element={<Profile />} />
+                                    <Route path="/user" element={<BoardUser />} />
+                                    <Route path="/my-courses" element={<UsersCourse />} />
+                                    <Route path="/my-courses/:courseId" element={<CourseDetail />} />
+                                    <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
+                                    <Route path="/lesson/:lessonId" element={<LessonDetail />} />
+                                </>
+                            )}
                             {showModeratorBoard && (
                                 <>
                                     <Route path="/mod" element={<BoardModerator />} />
-                                    <Route exact path="/courses" element={<CoursItems />} />
-                                    <Route exact path="/courses/:id" element={<OneCoursePage />} />
-                                    <Route exact path="/courses/:id/module/:moduleId" element={<ModulePage />} />
+                                    <Route path="/courses" element={<CoursItems />} />
+                                    <Route path="/courses/:id" element={<OneCoursePage />} />
+                                    <Route path="/courses/:id/module/:moduleId" element={<ModulePage />} />
                                     <Route path="/courses/:id/modules/:moduleId/lessons/:lessonId" element={<LessonPage />} />
                                     <Route path="/courses/:id/modules/:moduleId/lessons/:lessonId/topics/:topicId" element={<TopicPage />} />
                                     <Route path="*" element={<Navigate to="/courses" replace />} />
@@ -98,8 +104,8 @@ const App = () => {
                             )}
                             {showAdminBoard && (
                                 <>
-                                    <Route exact path="/mod" element={<Moderators />} />
-                                    <Route exact path="/users" element={<Users />} />
+                                    <Route path="/mod" element={<Moderators />} />
+                                    <Route path="/users" element={<Users />} />
                                     <Route path="/admin" element={<BoardAdmin />} />
                                 </>
                             )}
