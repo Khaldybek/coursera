@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress, Grid, Card, CardContent, Typography } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import CourseService from "../../services/courses.service.js";
+import UserCoursItem from "./UserCoursItem"; // Import the UserCoursItem component
 
 const UsersCourse = () => {
     const [courses, setCourses] = useState([]);
@@ -34,28 +35,13 @@ const UsersCourse = () => {
             {loading ? (
                 <CircularProgress size={50} />
             ) : (
-                <Grid container spacing={2} justifyContent="center">
-                    {courses.map((course, index) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                            <Card
-                                sx={{
-                                    width: 300,
-                                    height: 200,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    boxShadow: 3,
-                                    cursor: 'pointer',
-                                    ':hover': { boxShadow: 6 },
-                                }}
+                <Grid container spacing={4} justifyContent="center"> {/* Increase spacing */}
+                    {courses.map((course) => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
+                            <UserCoursItem
+                                data={course}
                                 onClick={() => handleCourseClick(course.id)}
-                            >
-                                <CardContent sx={{ paddingRight: '9px'}}>
-                                    <Typography padding={1} variant="h5">{course.name}</Typography>
-                                    <Typography variant="h7" color="text.secondary">
-                                        {course.description}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                            />
                         </Grid>
                     ))}
                 </Grid>
