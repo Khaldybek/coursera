@@ -1,47 +1,31 @@
 import React from 'react';
 import { Box, Container, Typography, Card, CardContent, Avatar, Grid, Button, Divider } from '@mui/material';
 import { Carousel } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
     sectionHeader: {
         textAlign: 'center',
-        padding: '60px 0 20px',
+        padding: '40px 0',
     },
     featureCard: {
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
         borderRadius: '10px',
-        textAlign: 'center',
     },
     carouselImage: {
         width: '100%',
-        height: '400px',
+        height: '300px',
         objectFit: 'cover',
     },
-    statsSection: {
+    stats: {
         textAlign: 'center',
-        padding: '60px 0',
-        backgroundColor: '#f5f5f5',
-    },
-    statsItem: {
         fontWeight: 'bold',
-        fontSize: '1.8rem',
+        fontSize: '1.5rem',
         color: '#4d65ff',
-        marginBottom: '8px',
-    },
-    galleryHeader: {
-        margin: '60px 0 20px',
-        textAlign: 'center',
-    },
-    footer: {
-        backgroundColor: '#3f51b5',
-        color: '#fff',
-        padding: '40px 0',
-        textAlign: 'center',
     },
 });
 
@@ -62,13 +46,13 @@ const Header = () => {
 const Features = () => {
     const classes = useStyles();
     return (
-        <Container maxWidth="lg" style={{ marginTop: '40px' }}>
+        <Container maxWidth="lg">
             <Box className={classes.sectionHeader}>
                 <Typography variant="h4" color="primary" gutterBottom>
                     It is a long established fact that a reader will be distracted.
                 </Typography>
             </Box>
-            <Grid container spacing={4}>
+            <Grid container spacing={3}>
                 {[...Array(6)].map((_, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                         <Card className={classes.featureCard} elevation={3}>
@@ -90,24 +74,19 @@ const Features = () => {
 const StatsSection = () => {
     const classes = useStyles();
     return (
-        <Box className={classes.statsSection}>
-            <Container maxWidth="lg">
-                <Grid container spacing={5} justifyContent="center">
-                    <Grid item xs={12} sm={4}>
-                        <Typography className={classes.statsItem}>$8B+</Typography>
-                        <Typography variant="body2">dollars</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Typography className={classes.statsItem}>20M+</Typography>
-                        <Typography variant="body2">people lives</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Typography className={classes.statsItem}>10K+</Typography>
-                        <Typography variant="body2">cities</Typography>
-                    </Grid>
+        <Container maxWidth="lg" style={{ marginTop: '40px' }}>
+            <Grid container spacing={5} justifyContent="center">
+                <Grid item xs={12} sm={4} className={classes.stats}>
+                    $8B+ <Typography variant="body2">dollars</Typography>
                 </Grid>
-            </Container>
-        </Box>
+                <Grid item xs={12} sm={4} className={classes.stats}>
+                    20M+ <Typography variant="body2">people lives</Typography>
+                </Grid>
+                <Grid item xs={12} sm={4} className={classes.stats}>
+                    10K+ <Typography variant="body2">cities</Typography>
+                </Grid>
+            </Grid>
+        </Container>
     );
 };
 
@@ -121,38 +100,34 @@ const ImageCarousel = () => (
     </Carousel>
 );
 
-const Footer = () => {
-    const classes = useStyles();
-    return (
-        <Box className={classes.footer}>
-            <Container>
-                <Typography variant="h4" gutterBottom>
-                    Join Us
-                </Typography>
-                <Typography variant="body1" color="inherit">
-                    Sign up today to stay updated on our latest offers and news.
-                </Typography>
-                <Box mt={3}>
-                    <Button variant="contained" color="secondary" href="https://#Open-Positions">
-                        See Open Positions →
-                    </Button>
-                </Box>
-                <Divider variant="middle" style={{ backgroundColor: 'white', margin: '40px 0' }} />
-                <Typography variant="body2">© 2024 Company Name. All rights reserved.</Typography>
-            </Container>
-        </Box>
-    );
-};
+const Footer = () => (
+    <Box bgcolor="primary.main" color="white" py={5} textAlign="center">
+        <Container>
+            <Typography variant="h4" gutterBottom>
+                Join Us
+            </Typography>
+            <Typography variant="body1" color="inherit">
+                Sign up today to stay updated on our latest offers and news.
+            </Typography>
+            <Box mt={3}>
+                <Button variant="contained" color="secondary" href="https://#Open-Positions">
+                    See Open Positions →
+                </Button>
+            </Box>
+            <Divider variant="middle" style={{ backgroundColor: 'white', margin: '40px 0' }} />
+            <Typography variant="body2">© 2024 Company Name. All rights reserved.</Typography>
+        </Container>
+    </Box>
+);
 
 const AboutUs = () => {
-    const classes = useStyles();
     return (
         <Box>
             <Header />
             <Container maxWidth="lg">
                 <Features />
                 <StatsSection />
-                <Box my={5} className={classes.galleryHeader}>
+                <Box my={5}>
                     <Typography variant="h4" align="center" gutterBottom>
                         Our Gallery
                     </Typography>

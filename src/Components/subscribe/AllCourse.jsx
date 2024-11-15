@@ -2,32 +2,27 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress, Grid, Box } from "@mui/material";
 import CourseService from "../../services/courses.service.js";
-import UserCoursItem from "./UserCoursItem";
+import AllCoursItem from "./AllCoursItem";
 
-const UsersCourse = () => {
+const AllCourse = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const user = CourseService.getCurrentUser();
-        if (user && user.id) {
-            CourseService.getSubscribedCourses(user.id)
-                .then(response => {
-                    setCourses(response.data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error("Error fetching subscribed courses:", error);
-                    setLoading(false);
-                });
-        } else {
-            setLoading(false);
-        }
+        CourseService.getAll()
+            .then(response => {
+                setCourses(response || []);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error("Error fetching courses:", error);
+                setLoading(false);
+            });
     }, []);
 
     const handleCourseClick = (courseId) => {
-        navigate(`/my-courses/${courseId}`);
+        navigate(`/all-courses/${courseId}`);
     };
 
     return (
@@ -38,9 +33,9 @@ const UsersCourse = () => {
                 </Box>
             ) : (
                 <Grid container spacing={4} justifyContent="center">
-                    {courses.map((course) => (
+                    {Array.isArray(courses) && courses.map((course) => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
-                            <UserCoursItem
+                            <AllCoursItem
                                 data={course}
                                 onClick={() => handleCourseClick(course.id)}
                             />
@@ -52,4 +47,4 @@ const UsersCourse = () => {
     );
 };
 
-export default UsersCourse;
+export default AllCourse;

@@ -38,7 +38,7 @@ const MenuList = () => {
                 label: "Курсы",
                 key: "courses",
                 icon: <SwitcherOutlined style={{ fontSize: "20px" }} />,
-                onClick: () => navigate('/courses')
+                onClick: () => navigate('/all-courses')
             },
             {
                 label: "Мой курсы",
@@ -58,6 +58,12 @@ const MenuList = () => {
                 key: "survey",
                 icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
                 onClick: () => navigate("/courses"),
+            },
+            {
+                label: "УПР Курсами",
+                key: "subscription-management", // Ensure this key is unique
+                icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate("/subscribe"),
             }
         ] : []),
         ...(role === "ADMIN" ? [
