@@ -35,10 +35,26 @@ const deleteTopic = async (topicId) => {
         throw error;
     }
 };
+ const fetchTopic = async (topicId) => {
+    const response = await fetch(`http://localhost:8000/api/topics/by-lesson/${topicId}`);
+    console.log(response);
+    return response.json();
+};
+
+ const takeTest = async (testId, selectedOption) => {
+    const response = await fetch(`http://localhost:8000/api/tests/${testId}/take?selectedOption=${selectedOption}`, {
+        method: "POST"
+    });
+    console.log(response);
+    return response.json();
+};
+
 
 const TopicService = {
     createTopic,
     deleteTopic,
+    fetchTopic,
+    takeTest
 };
 
 export default TopicService;

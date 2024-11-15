@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LessonService from "../../services/lesson.service.js";
 import { Box, Typography, CircularProgress, Avatar, Divider, Fab, Button } from "@mui/material";
-import SampleImage from "../../Style/imeg/640px-Toydaria2.jpg"; // Placeholder image
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const LessonDetail = () => {
@@ -18,109 +17,88 @@ const LessonDetail = () => {
         const fetchLessonData = async () => {
             setLoading(true);
             try {
-                const topicsData = await LessonService.getTopicsByLesson(lessonId);
-                setTopics(topicsData);
-                setLesson({ name: "Lesson Name Placeholder" }); // Replace with actual lesson data if available
+                const [lessonResponse, topicsResponse] = await Promise.all([
+                    fetch(`http://localhost:8000/api/v1/lessons/${lessonId}`).then((res) => res.json()),
+                    fetch(`http://localhost:8000/api/topics/by-lesson/${lessonId}`).then((res) => res.json())
+                ]);
+                setLesson(lessonResponse);
+                setTopics(topicsResponse);
             } catch (err) {
-                console.error("Error fetching lesson details:", err);
-                setError("Unable to load lesson details. Please try again later.");
+                setError("Не удалось загрузить данные об уроке. Попробуйте позже.");
             } finally {
                 setLoading(false);
             }
         };
         fetchLessonData();
 
-        // Scroll event listener to show/hide scroll-to-top button
         const handleScroll = () => {
-            if (window.scrollY > 200) {
-                setShowScrollButton(true);
-            } else {
-                setShowScrollButton(false);
-            }
+            setShowScrollButton(window.scrollY > 200);
         };
         window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
+        return () => window.removeEventListener("scroll", handleScroll);
     }, [lessonId]);
 
     const handleGoBack = () => navigate(-1);
-
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
-    };
-
-    if (loading) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', padding: 4 }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
-    if (error) {
-        return (
-            <Box sx={{ padding: 4 }}>
-                <Typography variant="h6" color="error">{error}</Typography>
-            </Box>
-        );
-    }
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
     return (
-            <>
-        <Box sx={{ padding: 4, maxWidth: '800px', margin: '0 auto', backgroundColor: '#f9f9f9', borderRadius: 2 }}>
-            <Button onClick={handleGoBack} variant="outlined" sx={{ mb: 3, color: 'primary.main', borderColor: 'primary.main' }}>
+        <Box sx={{ width: '100%', padding: 3, backgroundColor: '#f4f5f7', minHeight: '100vh' }}>
+            <Button onClick={handleGoBack} variant="outlined" sx={{ mb: 3, color: '#007BFF', borderColor: '#007BFF' }}>
                 Назад
             </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar src={SampleImage} sx={{ width: 70, height: 70, mr: 2 }} />
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                    {lesson.lessonName ? lesson.lessonName : "Lesson Details"}
-                </Typography>
-            </Box>
-            <Typography variant="body1" sx={{ mb: 3 }}>
-                Below are the topics related to this lesson:
-            </Typography>
-
-            <Divider sx={{ mb: 3 }} />
-
-            <Box>
-                {topics.map((topic) => (
-                    <Box key={topic.id} sx={{ mb: 3 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
-                            {topic.name || "Untitled Topic"}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
-                            {topic.title || "No additional title provided"}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {topic.description || "Здесь пусто"}
+            {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: 4 }}>
+                    <CircularProgress />
+                </Box>
+            ) : error ? (
+                <Typography variant="h6" color="error" sx={{ textAlign: 'center', marginTop: 4 }}>{error}</Typography>
+            ) : (
+                <Box sx={{ backgroundColor: '#fff', padding: 3, borderRadius: 2, boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                        <Avatar src={lesson.imageUrl || "default-image.jpg"} sx={{ width: 80, height: 80, mr: 3 }} />
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#333' }}>
+                            {lesson.name || "Название урока"}
                         </Typography>
                     </Box>
-                ))}
-            </Box>
+                    <Typography variant="body1" sx={{ mb: 3, color: '#555' }}>
+                        {lesson.description || "Описание урока отсутствует."}
+                    </Typography>
 
-            {/* Scroll-to-top button */}
-            {showScrollButton && (
-                <Fab
-                    color="primary"
-                    aria-label="scroll to top"
-                    onClick={scrollToTop}
-                    sx={{
-                        position: 'fixed',
-                        bottom: 16,
-                        right: 16,
-                    }}
-                >
-                    <ArrowUpwardIcon />
-                </Fab>
+                    <Divider sx={{ mb: 4 }} />
+
+                    <Typography variant="h5" sx={{ fontWeight: 'medium', color: '#333', mb: 2 }}>
+                        Темы урока
+                    </Typography>
+                    {topics.map((topic) => (
+                        <Box key={topic.id} sx={{ mb: 3, padding: 2, backgroundColor: '#f9fafb', borderRadius: 2, boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)' }}>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#007BFF' }}>
+                                {topic.name || "Без названия"}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: '#666' }}>
+                                {topic.description || "Описание темы отсутствует."}
+                            </Typography>
+                        </Box>
+                    ))}
+
+                    {showScrollButton && (
+                        <Fab
+                            color="primary"
+                            aria-label="scroll to top"
+                            onClick={scrollToTop}
+                            sx={{
+                                position: 'fixed',
+                                bottom: 16,
+                                right: 16,
+                                backgroundColor: '#007BFF',
+                                '&:hover': { backgroundColor: '#0056b3' },
+                            }}
+                        >
+                            <ArrowUpwardIcon />
+                        </Fab>
+                    )}
+                </Box>
             )}
         </Box>
-                </>
     );
 };
 
