@@ -70,7 +70,18 @@ const LessonDetail = () => {
                         Темы урока
                     </Typography>
                     {topics.map((topic) => (
-                        <Box key={topic.id} sx={{ mb: 3, padding: 2, backgroundColor: '#f9fafb', borderRadius: 2, boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)' }}>
+                        <Box
+                            key={topic.id}
+                            onClick={() => navigate(`/topic/${topic.id}`)}
+                            sx={{
+                                mb: 3,
+                                padding: 2,
+                                backgroundColor: '#f9fafb',
+                                borderRadius: 2,
+                                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)',
+                                cursor: 'pointer'  // Добавляем указатель, чтобы показать, что элемент кликабельный
+                            }}
+                        >
                             <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#007BFF' }}>
                                 {topic.name || "Без названия"}
                             </Typography>
@@ -79,6 +90,7 @@ const LessonDetail = () => {
                             </Typography>
                         </Box>
                     ))}
+
 
                     {showScrollButton && (
                         <Fab
