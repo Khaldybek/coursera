@@ -9,26 +9,42 @@ const OneTopicPage = () => {
     const [currentTestIndex, setCurrentTestIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
     const [results, setResults] = useState([]);
+    const [completedTestIds, setCompletedTestIds] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const user = AuthService.getCurrentUser();
 
+    // Загрузка темы и тестов
     useEffect(() => {
         const fetchTopic = async () => {
-            setLoading(true);
             try {
                 const response = await fetch(`http://localhost:8000/api/topics/${topicId}`);
                 const data = await response.json();
                 setTopic(data);
             } catch (err) {
                 setError("Ошибка при загрузке данных темы.");
-            } finally {
-                setLoading(false);
             }
         };
-        fetchTopic();
-    }, [topicId]);
+
+        const fetchUserResults = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/tests/topic/${topicId}/user/${user.id}/results`);
+                const data = await response.json();
+                setCompletedTestIds(data.map((result) => result.testId));
+            } catch (err) {
+                setError("Ошибка при загрузке результатов тестов.");
+            }
+        };
+
+        const loadData = async () => {
+            setLoading(true);
+            await fetchTopic();
+            await fetchUserResults();
+            setLoading(false);
+        };
+
+        loadData();
+    }, [topicId, user.id]);
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
@@ -37,33 +53,38 @@ const OneTopicPage = () => {
     const handleNextQuestion = () => {
         if (selectedOption === null) return;
 
-        const newResult = {
-            testId: topic.tests[currentTestIndex].id,
-            selectedOption,
-        };
+        const currentTest = topic.tests[currentTestIndex];
 
-        if (currentTestIndex < topic.tests.length - 1) {
-            // Добавляем текущий результат и переходим к следующему вопросу
-            setResults((prev) => [...prev, newResult]);
-            setSelectedOption(null);
-            setCurrentTestIndex((prev) => prev + 1);
+        setResults((prev) => [
+            ...prev,
+            { testId: currentTest.id, selectedOption },
+        ]);
+        setSelectedOption(null);
+
+        let nextIndex = currentTestIndex + 1;
+
+        // Пропускаем завершенные тесты
+        while (
+            nextIndex < topic.tests.length &&
+            completedTestIds.includes(topic.tests[nextIndex].id)
+            ) {
+            nextIndex++;
+        }
+
+        if (nextIndex < topic.tests.length) {
+            setCurrentTestIndex(nextIndex);
         } else {
-            // Завершаем тест, добавляя последний результат
-            const updatedResults = [...results, newResult]; // Локальное обновление
-            setResults(updatedResults); // Обновляем состояние для визуализации, если нужно
-            submitResults(updatedResults); // Передаем все результаты в функцию
+            alert("Вы завершили все доступные тесты!");
+            submitResults();
         }
     };
 
-
-    const submitResults = async (finalResults) => {
+    const submitResults = async () => {
         try {
             const response = await fetch(`http://localhost:8000/api/tests/take?userId=${user.id}`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(finalResults), // Используем переданный массив результатов
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(results),
             });
 
             if (!response.ok) {
@@ -78,7 +99,6 @@ const OneTopicPage = () => {
             alert("Произошла ошибка при отправке результатов. Пожалуйста, попробуйте позже.");
         }
     };
-
 
     if (loading) {
         return (
@@ -95,6 +115,12 @@ const OneTopicPage = () => {
             </Typography>
         );
     }
+
+    // Получаем тесты, которые не завершены
+    const remainingTests = topic.tests.filter((test) => !completedTestIds.includes(test.id));
+
+    // Если нет оставшихся тестов, показываем сообщение
+    const testLocked = remainingTests.length === 0;
 
     return (
         <Box sx={{ width: "100%", padding: 3, backgroundColor: "#f4f5f7", minHeight: "100vh" }}>
@@ -114,9 +140,16 @@ const OneTopicPage = () => {
                 </CardContent>
             </Card>
 
-            {/* Тесты */}
-            {topic.tests.length > 0 ? (
-                <Box>
+            {/* Если все тесты завершены, показываем сообщение */}
+            {testLocked ? (
+                <Box sx={{ textAlign: "center", padding: 4 }}>
+                    <Typography variant="h5" color="error">
+                        Вы уже прошли все тесты по этой теме.
+                    </Typography>
+                </Box>
+            ) : (
+                <>
+                    {/* Тесты */}
                     <Typography variant="h5" sx={{ mb: 2, color: "#007BFF", fontWeight: "bold" }}>
                         Вопрос {currentTestIndex + 1} из {topic.tests.length}
                     </Typography>
@@ -145,11 +178,7 @@ const OneTopicPage = () => {
                     >
                         {currentTestIndex < topic.tests.length - 1 ? "Следующий вопрос" : "Завершить тест"}
                     </Button>
-                </Box>
-            ) : (
-                <Typography variant="h6" sx={{ textAlign: "center", marginTop: 4 }}>
-                    Тесты для этой темы отсутствуют.
-                </Typography>
+                </>
             )}
         </Box>
     );
