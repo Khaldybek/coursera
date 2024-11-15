@@ -24,7 +24,6 @@ const OneTopicPage = () => {
             try {
                 const response = await fetch(`http://localhost:8000/api/topics/${topicId}`);
                 const data = await response.json();
-
                 setTopic(data);
             } catch (err) {
                 setError("Ошибка при загрузке данных темы.");
@@ -35,7 +34,6 @@ const OneTopicPage = () => {
             try {
                 const response = await fetch(`http://localhost:8000/api/tests/topic/${topicId}/user/${user.id}/results`);
                 const data = await response.json();
-                console.log(data);
                 setCompletedTestIds(data.map((result) => result.testId));
             } catch (err) {
                 setError("Ошибка при загрузке результатов тестов.");
@@ -89,7 +87,6 @@ const OneTopicPage = () => {
             }
 
             const resultData = await response.json();
-
             alert("Тест успешно завершен!");
         } catch (err) {
             alert("Произошла ошибка при отправке результатов. Пожалуйста, попробуйте позже.");
@@ -147,7 +144,6 @@ const OneTopicPage = () => {
                 <Card sx={{ mt: 3, padding: 2, border: "1px solid #1976d2" }}>
                     <CardContent>
                         {testLocked ? (
-
                             <Box sx={{ textAlign: "center", padding: 4 }}>
                                 <Typography variant="h5" color="error">
                                     Вы уже прошли все тесты по этой теме.
