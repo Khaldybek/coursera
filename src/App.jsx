@@ -24,7 +24,7 @@ import TopicPage from "./Components/Moderator/TopicPage.jsx";
 import LessonDetail from "./Components/UsersHandle/LessonDetail.jsx";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
-import TopicPageForUser from "./Components/UsersHandle/TopicPageForUser.jsx";
+import OneTopicPage from "./Components/UsersHandle/OneTopicPage.jsx";
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -64,7 +64,7 @@ const App = () => {
     return (
         <div className="mainDisplay">
             {currentUser && <Navbar />}
-            <div className="container" style={{ margin: 0, padding: 0, display: "flex", justifyContent: "center" ,width: "100%"}}>
+            <div  style={{ margin: 0, padding: 0, display: "flex", justifyContent: "center",width:'100%' }}>
                 <Routes>
                     {!currentUser ? (
                         <>
@@ -87,7 +87,8 @@ const App = () => {
                                     <Route path="/my-courses/:courseId" element={<CourseDetail />} />
                                     <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
                                     <Route path="/lesson/:lessonId" element={<LessonDetail />} />
-                                    <Route path="/topic/:lessonId" element={<TopicPageForUser />} />
+                                    <Route path="/topic/:topicId" element={<OneTopicPage />} />
+
                                 </>
                             )}
                             {showModeratorBoard && (
