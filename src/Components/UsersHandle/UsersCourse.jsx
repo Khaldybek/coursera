@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress, Grid, Box } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import CourseService from "../../services/courses.service.js";
-import UserCoursItem from "./UserCoursItem";
+import UserCoursItem from "./UserCoursItem"; // Import the UserCoursItem component
 
 const UsersCourse = () => {
     const [courses, setCourses] = useState([]);
@@ -31,13 +31,11 @@ const UsersCourse = () => {
     };
 
     return (
-        <Box sx={{ padding: 4, minHeight: '100vh' }}>
+        <div className="courses-container">
             {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-                    <CircularProgress size={40} />
-                </Box>
+                <CircularProgress size={50} />
             ) : (
-                <Grid container spacing={4} justifyContent="center">
+                <Grid container spacing={4} justifyContent="center"> {/* Increase spacing */}
                     {courses.map((course) => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
                             <UserCoursItem
@@ -48,7 +46,7 @@ const UsersCourse = () => {
                     ))}
                 </Grid>
             )}
-        </Box>
+        </div>
     );
 };
 

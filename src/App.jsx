@@ -32,7 +32,6 @@ import GetAllCoursesModerator from "./Components/Moderator/subscribe/GetAllCours
 // Utilities
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
-import OneTopicPage from "./Components/UsersHandle/OneTopicPage.jsx";
 
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -44,7 +43,7 @@ const App = () => {
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
-
+        console.log(user);
         if (user) {
             setCurrentUser(user);
             setShowModeratorBoard(user.ROLE.includes("MODERATOR"));
@@ -73,7 +72,7 @@ const App = () => {
     return (
         <div className="mainDisplay">
             {currentUser && <Navbar />}
-            <div className="container mt-3" style={{ margin: 0, padding: 0, display: "flex", justifyContent: "center" }}>
+            <div className="container" style={{ margin: 0, padding: 0, display: "flex", justifyContent: "center" }}>
                 <Routes>
                     {!currentUser ? (
                         <>
@@ -84,19 +83,22 @@ const App = () => {
                         </>
                     ) : (
                         <>
-                            <Route path="/" element={<AboutUs />} />
-                            <Route path="/home" element={<Home />} />
-                            <Route path="/profile" element={<Profile />} />
-                            <Route path="/user" element={<BoardUser />} />
-                            <Route path="/my-courses" element={<UsersCourse />} />
-                            <Route path="/my-courses/:courseId" element={<CourseDetail />} />
-                            <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
-                            <Route path="/lesson/:lessonId" element={<LessonDetail />} />
-                            <Route path="/all-courses" element={<AllCourse />} />
-                            <Route path="/all-courses/:courseId" element={<AllCourseDetail />} />
-                            <Route path="/topic/:topicId" element={<OneTopicPage />} />
+                            {showUserBoard && (
+                                <>
 
+                                    {/*<Route path="/users" element={<Users />} />*/}
+                                    {/*<Route path="/" element={<AboutUs />} />*/}
+                                    {/*<Route path="/home" element={<Home />} />*/}
+                                    {/*<Route path="/profile" element={<Profile />} />*/}
+                                    {/*<Route path="/user" element={<BoardUser />} />*/}
+                                    <Route path="/" element={<UsersCourse />} />
+                                    <Route path="/my-courses" element={<UsersCourse />} />
+                                    <Route path="/my-courses/:courseId" element={<CourseDetail />} />
+                                    <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
+                                    <Route path="/lesson/:lessonId" element={<LessonDetail />} />
 
+                                </>
+                            )}
                             {showModeratorBoard && (
                                 <>
                                     <Route path="/mod" element={<BoardModerator />} />
