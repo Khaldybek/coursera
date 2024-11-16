@@ -25,14 +25,14 @@ export default function CoursItem({ data }) {
 
     return (
         <Card sx={{
-            minWidth: 200,
+            width: 300,
             transition: '0.3s',
             '&:hover': {
                 boxShadow: 6,
             },
         }}>
             <CardContent>
-                <Typography gutterBottom sx={{ fontSize: 14 }}>
+                <Typography gutterBottom sx={{ fontSize: 16 }}>
                     {data.name}
                 </Typography>
                 <Typography variant="body2">

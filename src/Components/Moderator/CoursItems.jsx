@@ -5,7 +5,6 @@ import CoursesService from "../../services/courses.service.js";
 import "./Style/Courses.css"
 import {PlusSquareOutlined} from "@ant-design/icons";
 import CreateCourses from "./CreateCourses";
-import InputOTPPage from "../InputOTPPage.jsx";
 const CoursItems = () => {
 
     const [allCourses, setAllCourses] = useState([]);
@@ -28,7 +27,7 @@ const CoursItems = () => {
     }, []);
 
     return (
-        <div className="courses-container">
+        <div className="courses-container" style={{paddingTop: 30}}>
             {loading ? (
                 <Spin size="large" tip="Loading courses..." />
             ) : (

@@ -6,7 +6,8 @@ import {
     TeamOutlined,
     LogoutOutlined,
     IdcardOutlined,
-    BarChartOutlined
+    BarChartOutlined,
+    PieChartOutlined
 } from "@ant-design/icons";
 import AuthService from "../../services/auth.service.js";
 import { useNavigate } from 'react-router-dom';
@@ -54,6 +55,7 @@ const MenuList = () => {
             }
         ] : []),
         ...(role === "MODERATOR" ? [
+
             {
                 label: "Создать Курсы",
                 key: "create courses",
@@ -70,6 +72,12 @@ const MenuList = () => {
                 key: "subscription-management", // Ensure this key is unique
                 icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
                 onClick: () => navigate("/subscribe"),
+            },
+            {
+                label: "Анализ курсов",
+                key: "analysis",
+                icon: <PieChartOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate('/analysisCourses')
             }
         ] : []),
         ...(role === "ADMIN" ? [

@@ -28,11 +28,11 @@ import AllCourse from "./Components/subscribe/AllCourse";
 import AllCourseDetail from "./Components/subscribe/AllCourseDetail";
 import ModeratorCourses from "./Components/Moderator/subscribe/ModeratorCourses";
 import GetAllCoursesModerator from "./Components/Moderator/subscribe/GetAllCoursesModerator";
-
+import CourseAnalysis from "./Components/UsersHandle/CourseAnalysis.jsx";
 // Utilities
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
-
+import CoursesOverview from "./Components/Moderator/CoursesOverview.jsx";
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -91,8 +91,10 @@ const App = () => {
                                     {/*<Route path="/home" element={<Home />} />*/}
                                     {/*<Route path="/profile" element={<Profile />} />*/}
                                     {/*<Route path="/user" element={<BoardUser />} />*/}
+
                                     <Route path="/all-courses/:courseId" element={<AllCourseDetail />} />
                                     <Route path="/all-courses" element={<AllCourse />} />
+                                    <Route path="/analysis" element={<CourseAnalysis />} />
                                     <Route path="/" element={<UsersCourse />} />
                                     <Route path="/my-courses" element={<UsersCourse />} />
                                     <Route path="/my-courses/:courseId" element={<CourseDetail />} />
@@ -104,6 +106,7 @@ const App = () => {
                             )}
                             {showModeratorBoard && (
                                 <>
+                                    <Route path="/analysisCourses" element={<CoursesOverview />} />
                                     <Route path="/mod" element={<BoardModerator />} />
                                     <Route path="/courses" element={<CoursItems />} />
                                     <Route path="/courses/:id" element={<OneCoursePage />} />
