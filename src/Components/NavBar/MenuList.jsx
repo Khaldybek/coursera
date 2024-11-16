@@ -5,12 +5,12 @@ import {
     SwitcherOutlined,
     TeamOutlined,
     LogoutOutlined,
-    IdcardOutlined
+    IdcardOutlined,
+    BarChartOutlined
 } from "@ant-design/icons";
 import AuthService from "../../services/auth.service.js";
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-
 const MenuList = () => {
     const user = AuthService.getCurrentUser();
     const role = user.ROLE;
@@ -45,6 +45,12 @@ const MenuList = () => {
                 key: "my-courses",
                 icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
                 onClick: () => navigate('/my-courses')
+            },
+            {
+                label: "Анализ курсов",
+                key: "courses-analysis",
+                icon: <BarChartOutlined style={{ fontSize: "20px" }} />,
+                onClick: () => navigate('/analysis')
             }
         ] : []),
         ...(role === "MODERATOR" ? [

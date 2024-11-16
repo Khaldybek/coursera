@@ -66,32 +66,47 @@ const LessonDetail = () => {
     const handleOptionChange = (event) => setSelectedOption(event.target.value);
 
     const handleNextQuestion = () => {
-        if (!selectedOption) return;
+        if (!selectedOption) return; // Если ответ не выбран, не продолжать
 
-        setResults((prev) => [...prev, { testId: tests[currentTestIndex].id, selectedOption }]);
-        setSelectedOption(null);
+        // Добавляем ответ в результаты
+        const currentResult = { testId: tests[currentTestIndex].id, selectedOption };
 
-        if (currentTestIndex < tests.length - 1) {
-            setCurrentTestIndex((prev) => prev + 1);
-        } else {
+        setResults((prev) => [...prev, currentResult]); // Добавляем ответ в массив
+
+        setSelectedOption(null); // Очищаем выбранный вариант
+
+        // Если это последний вопрос, сразу отправляем результаты
+        if (currentTestIndex === tests.length - 1) {
             submitResults();
+        } else {
+            setCurrentTestIndex((prev) => prev + 1); // Переходим к следующему вопросу
         }
     };
 
     const submitResults = async () => {
+
+        console.log("Отправка результатов. Массив результатов:", results);
+        results.push({ testId: tests[currentTestIndex].id, selectedOption })
+
+        console.log("Отправка результатов. Массив результатов:", results);
+
         try {
             const response = await fetch(`http://localhost:8000/api/tests/take?userId=${user.id}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(results),
             });
+
             const updatedSummary = await response.json();
-            setTestSummary(updatedSummary);
-            alert("Тест успешно завершен!");
+            setTestSummary(updatedSummary); // Обновляем результаты
+            alert("Тест успешно завершен!"); // Уведомляем пользователя
         } catch (err) {
+            console.error("Ошибка при отправке результатов:", err);
             alert("Ошибка при отправке результатов. Попробуйте позже.");
         }
     };
+
+
 
     if (loading) {
         return (
