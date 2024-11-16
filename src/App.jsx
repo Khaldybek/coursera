@@ -91,11 +91,14 @@ const App = () => {
                                     {/*<Route path="/home" element={<Home />} />*/}
                                     {/*<Route path="/profile" element={<Profile />} />*/}
                                     {/*<Route path="/user" element={<BoardUser />} />*/}
+                                    <Route path="/all-courses/:courseId" element={<AllCourseDetail />} />
+                                    <Route path="/all-courses" element={<AllCourse />} />
                                     <Route path="/" element={<UsersCourse />} />
                                     <Route path="/my-courses" element={<UsersCourse />} />
                                     <Route path="/my-courses/:courseId" element={<CourseDetail />} />
                                     <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
                                     <Route path="/lesson/:lessonId" element={<LessonDetail />} />
+
 
                                 </>
                             )}
