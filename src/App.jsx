@@ -87,7 +87,7 @@ const App = () => {
                                 <>
 
                                     {/*<Route path="/users" element={<Users />} />*/}
-                                    {/*<Route path="/" element={<AboutUs />} />*/}
+                                    <Route path="/" element={<AboutUs />} />
                                     {/*<Route path="/home" element={<Home />} />*/}
                                     {/*<Route path="/profile" element={<Profile />} />*/}
                                     {/*<Route path="/user" element={<BoardUser />} />*/}
@@ -95,7 +95,6 @@ const App = () => {
                                     <Route path="/all-courses/:courseId" element={<AllCourseDetail />} />
                                     <Route path="/all-courses" element={<AllCourse />} />
                                     <Route path="/analysis" element={<CourseAnalysis />} />
-                                    <Route path="/" element={<UsersCourse />} />
                                     <Route path="/my-courses" element={<UsersCourse />} />
                                     <Route path="/my-courses/:courseId" element={<CourseDetail />} />
                                     <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
