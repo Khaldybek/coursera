@@ -51,7 +51,7 @@ export default function ModeratorCourses() {
 
                 <Grid container spacing={3} justifyContent="center">
                     {courses.map((course) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
+                        <Grid item xs={12} sm={6} md={4} key={course.id}>
                             <ModeratorCoursItem data={course} />
                         </Grid>
                     ))}
