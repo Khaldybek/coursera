@@ -63,7 +63,7 @@ const AllCourse = () => {
                                         {course.name}
                                     </Typography>
                                     <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                                        {course.description.substring(0, 100)}...
+                                        {course.description.substring(0, 20)}...
                                     </Typography>
                                     <Button
                                         variant="contained"
