@@ -1,166 +1,177 @@
-import React from 'react';
-import { Box, Container, Typography, Card, CardContent, Avatar, Grid, Button, Divider } from '@mui/material';
-import { Carousel } from 'antd';
-import { makeStyles } from '@mui/styles';
+import React from "react";
+import {
+    Layout,
+    Button,
+    Typography,
+    Row,
+    Col,
+    Card,
+    Collapse,
+    Divider,
+    Space,
+} from "antd";
+import {
+    CheckCircleOutlined,
+    RocketOutlined,
+    TeamOutlined,
+    GlobalOutlined,
+} from "@ant-design/icons";
+import banner from './Images/banner.jpg';
+import first from './Images/first.jpg';
 
-const useStyles = makeStyles({
-    sectionHeader: {
-        textAlign: 'center',
-        padding: '60px 0 20px',
-    },
-    featureCard: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
-        borderRadius: '10px',
-        textAlign: 'center',
-    },
-    carouselImage: {
-        width: '100%',
-        height: '400px',
-        objectFit: 'cover',
-    },
-    statsSection: {
-        textAlign: 'center',
-        padding: '60px 0',
-        backgroundColor: '#f5f5f5',
-    },
-    statsItem: {
-        fontWeight: 'bold',
-        fontSize: '1.8rem',
-        color: '#4d65ff',
-        marginBottom: '8px',
-    },
-    galleryHeader: {
-        margin: '60px 0 20px',
-        textAlign: 'center',
-    },
-    footer: {
-        backgroundColor: '#3f51b5',
-        color: '#fff',
-        padding: '40px 0',
-        textAlign: 'center',
-    },
-});
-
-const Header = () => {
-    const classes = useStyles();
-    return (
-        <Box className={classes.sectionHeader}>
-            <Typography variant="h2" color="primary" gutterBottom>
-                What is Lorem Ipsum?
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. It has been the industry's standard dummy text since the 1500s.
-            </Typography>
-        </Box>
-    );
-};
-
-const Features = () => {
-    const classes = useStyles();
-    return (
-        <Container maxWidth="lg" style={{ marginTop: '40px' }}>
-            <Box className={classes.sectionHeader}>
-                <Typography variant="h4" color="primary" gutterBottom>
-                    It is a long established fact that a reader will be distracted.
-                </Typography>
-            </Box>
-            <Grid container spacing={4}>
-                {[...Array(6)].map((_, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card className={classes.featureCard} elevation={3}>
-                            <Avatar src="style/66ce000889d64ea2e38b044b_Icons=Membership.png" />
-                            <CardContent>
-                                <Typography variant="h6">Take Ownership</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Be curious. Be accountable.
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-        </Container>
-    );
-};
-
-const StatsSection = () => {
-    const classes = useStyles();
-    return (
-        <Box className={classes.statsSection}>
-            <Container maxWidth="lg">
-                <Grid container spacing={5} justifyContent="center">
-                    <Grid item xs={12} sm={4}>
-                        <Typography className={classes.statsItem}>$8B+</Typography>
-                        <Typography variant="body2">dollars</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Typography className={classes.statsItem}>20M+</Typography>
-                        <Typography variant="body2">people lives</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Typography className={classes.statsItem}>10K+</Typography>
-                        <Typography variant="body2">cities</Typography>
-                    </Grid>
-                </Grid>
-            </Container>
-        </Box>
-    );
-};
-
-const ImageCarousel = () => (
-    <Carousel autoplay>
-        {[1, 2, 3, 4, 5].map((index) => (
-            <div key={index}>
-                <img src={`style/card${index}.jpg`} alt={`Card ${index}`} style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
-            </div>
-        ))}
-    </Carousel>
-);
-
-const Footer = () => {
-    const classes = useStyles();
-    return (
-        <Box className={classes.footer}>
-            <Container>
-                <Typography variant="h4" gutterBottom>
-                    Join Us
-                </Typography>
-                <Typography variant="body1" color="inherit">
-                    Sign up today to stay updated on our latest offers and news.
-                </Typography>
-                <Box mt={3}>
-                    <Button variant="contained" color="secondary" href="https://#Open-Positions">
-                        See Open Positions →
-                    </Button>
-                </Box>
-                <Divider variant="middle" style={{ backgroundColor: 'white', margin: '40px 0' }} />
-                <Typography variant="body2">© 2024 Company Name. All rights reserved.</Typography>
-            </Container>
-        </Box>
-    );
-};
+const { Header, Content, Footer } = Layout;
+const { Title, Paragraph } = Typography;
+const { Panel } = Collapse;
 
 const AboutUs = () => {
-    const classes = useStyles();
     return (
-        <Box>
-            <Header />
-            <Container maxWidth="lg">
-                <Features />
-                <StatsSection />
-                <Box my={5} className={classes.galleryHeader}>
-                    <Typography variant="h4" align="center" gutterBottom>
-                        Our Gallery
-                    </Typography>
-                    <ImageCarousel />
-                </Box>
-            </Container>
-            <Footer />
-        </Box>
+        <Layout>
+            {/* Шапка */}
+            <Header style={{ backgroundColor: "#001529", color: "#fff" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ fontSize: "20px", fontWeight: "bold" }}>Coursera Plus</div>
+                    <Button
+                        type="primary"
+                        shape="round"
+                        size="large"
+                        style={{ backgroundColor: "#007BFF", borderColor: "#0056b3" }}
+                    >
+                        Присоединиться
+                    </Button>
+                </div>
+            </Header>
+
+            {/* Геробаннер */}
+            <div
+                style={{
+                    minHeight: "70vh",
+                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url(${first})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    color: "#fff",
+                    textAlign: "center",
+                    padding: "20px",
+                }}
+            >
+                <div style={{ background: "rgba(0, 0, 0, 0.5)", padding: "30px", borderRadius: "10px" }}>
+                    <Title style={{ color: "#fff", fontSize: "42px", marginBottom: "20px" }}>
+                        Откройте новые возможности с Coursera Plus
+                    </Title>
+                    <Paragraph style={{ color: "#f0f0f0", fontSize: "18px" }}>
+                        Мы предоставляем неограниченный доступ к курсам, которые изменят вашу карьеру и жизнь.
+                    </Paragraph>
+                    <Space>
+                        <Button
+                            type="primary"
+                            size="large"
+                            style={{
+                                backgroundColor: "#007BFF",
+                                borderColor: "#0056b3",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Начать учиться
+                        </Button>
+                        <Button type="default" size="large" style={{ fontWeight: "bold" }}>
+                            Подробнее
+                        </Button>
+                    </Space>
+                </div>
+            </div>
+
+            {/* Блок с преимуществами */}
+            <Content style={{ padding: "50px", backgroundColor: "#f0f2f5" }}>
+                <Title level={2} style={{ textAlign: "center", marginBottom: "40px" }}>
+                    Почему выбирают нас
+                </Title>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={12} lg={8}>
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
+                            <RocketOutlined style={{ fontSize: "48px", color: "#007BFF", marginBottom: "10px" }} />
+                            <Title level={4}>Доступ к лучшим курсам</Title>
+                            <Paragraph>Учитесь в удобное для вас время, с ведущими преподавателями.</Paragraph>
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={12} lg={8}>
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
+                            <CheckCircleOutlined style={{ fontSize: "48px", color: "#52c41a", marginBottom: "10px" }} />
+                            <Title level={4}>Сертификаты мирового уровня</Title>
+                            <Paragraph>
+                                Получите признанные сертификаты для ускорения своей карьеры.
+                            </Paragraph>
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={12} lg={8}>
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
+                            <TeamOutlined style={{ fontSize: "48px", color: "#faad14", marginBottom: "10px" }} />
+                            <Title level={4}>Сообщество экспертов</Title>
+                            <Paragraph>Присоединяйтесь к тысячам студентов по всему миру.</Paragraph>
+                        </Card>
+                    </Col>
+                </Row>
+            </Content>
+
+            {/* Секция о глобальном влиянии */}
+            <Content style={{ padding: "50px", backgroundColor: "#fff" }}>
+                <Row align="middle" gutter={[32, 32]}>
+                    <Col xs={24} md={12}>
+                        <img
+                            src={banner}
+                            alt="Изображение глобального влияния Coursera Plus"
+                            style={{ width: "100%", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.3)" }}
+                        />
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <Title level={2}>Влияние на весь мир</Title>
+                        <Paragraph style={{ fontSize: "16px", color: "#555" }}>
+                            Мы помогли миллионам студентов достичь своих целей. Программы Coursera Plus доступны для
+                            людей по всему миру.
+                        </Paragraph>
+                        <Button type="primary" size="large" style={{ marginTop: "20px" }}>
+                            Узнать больше
+                        </Button>
+                    </Col>
+                </Row>
+            </Content>
+
+            {/* Часто задаваемые вопросы */}
+            <Content style={{ padding: "50px", backgroundColor: "#f0f2f5" }}>
+                <Divider />
+                <Title level={2} style={{ textAlign: "center" }}>
+                    Часто задаваемые вопросы
+                </Title>
+                <Collapse accordion style={{ marginTop: "30px" }} bordered={false}>
+                    <Panel header="Что такое Coursera Plus?" key="1">
+                        <Paragraph>
+                            Coursera Plus — это подписка, которая предоставляет доступ к тысячам курсов и программ сертификации.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Как я могу получить сертификат?" key="2">
+                        <Paragraph>
+                            После завершения курса вам будет предложено пройти тестирование и получить сертификат.
+                        </Paragraph>
+                    </Panel>
+                </Collapse>
+            </Content>
+
+            {/* Футер */}
+            <Footer style={{ textAlign: "center", backgroundColor: "#001529", color: "#fff" }}>
+                <Space direction="vertical">
+                    <div>© Coursera Plus 2024 | Все права защищены</div>
+                    <div>
+                        <GlobalOutlined style={{ marginRight: "8px" }} />
+                        Доступно на нескольких языках
+                    </div>
+                    <div>
+                        <a href="https://www.coursera.org/" style={{ color: "#1890ff" }}>Узнать больше</a>
+                    </div>
+                </Space>
+            </Footer>
+        </Layout>
     );
 };
 
