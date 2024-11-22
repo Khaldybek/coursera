@@ -1,10 +1,27 @@
 import React from "react";
-import { Layout, Button, Typography, Row, Col, Card, Divider, Space } from "antd";
-import { CheckCircleOutlined, RocketOutlined, TeamOutlined, GlobalOutlined } from "@ant-design/icons";
+import {
+    Layout,
+    Button,
+    Typography,
+    Row,
+    Col,
+    Card,
+    Collapse,
+    Divider,
+    Space,
+} from "antd";
+import {
+    CheckCircleOutlined,
+    RocketOutlined,
+    TeamOutlined,
+    GlobalOutlined,
+} from "@ant-design/icons";
 import banner from './Images/banner.jpg';
+import first from './Images/first.jpg';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
+const { Panel } = Collapse;
 
 const AboutUs = () => {
     return (
@@ -13,18 +30,22 @@ const AboutUs = () => {
             <Header style={{ backgroundColor: "#001529", color: "#fff" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div style={{ fontSize: "20px", fontWeight: "bold" }}>Coursera Plus</div>
-                    <Button type="primary" shape="round" size="large"
-                            style={{ backgroundColor: "#007BFF", borderColor: "#0056b3" }}>
+                    <Button
+                        type="primary"
+                        shape="round"
+                        size="large"
+                        style={{ backgroundColor: "#007BFF", borderColor: "#0056b3" }}
+                    >
                         Присоединиться
                     </Button>
                 </div>
             </Header>
 
-            {/* Геробаннер с новой фотографией */}
+            {/* Геробаннер */}
             <div
                 style={{
-                    height: "70vh",
-                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url(${banner})`,
+                    minHeight: "70vh",
+                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url(${first})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     display: "flex",
@@ -69,24 +90,14 @@ const AboutUs = () => {
                 </Title>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={12} lg={8}>
-                        <Card
-                            hoverable
-                            style={{ textAlign: "center", transition: "transform 0.3s" }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
-                        >
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
                             <RocketOutlined style={{ fontSize: "48px", color: "#007BFF", marginBottom: "10px" }} />
                             <Title level={4}>Доступ к лучшим курсам</Title>
                             <Paragraph>Учитесь в удобное для вас время, с ведущими преподавателями.</Paragraph>
                         </Card>
                     </Col>
                     <Col xs={24} sm={12} lg={8}>
-                        <Card
-                            hoverable
-                            style={{ textAlign: "center", transition: "transform 0.3s" }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
-                        >
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
                             <CheckCircleOutlined style={{ fontSize: "48px", color: "#52c41a", marginBottom: "10px" }} />
                             <Title level={4}>Сертификаты мирового уровня</Title>
                             <Paragraph>
@@ -95,12 +106,7 @@ const AboutUs = () => {
                         </Card>
                     </Col>
                     <Col xs={24} sm={12} lg={8}>
-                        <Card
-                            hoverable
-                            style={{ textAlign: "center", transition: "transform 0.3s" }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
-                        >
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
                             <TeamOutlined style={{ fontSize: "48px", color: "#faad14", marginBottom: "10px" }} />
                             <Title level={4}>Сообщество экспертов</Title>
                             <Paragraph>Присоединяйтесь к тысячам студентов по всему миру.</Paragraph>
@@ -115,7 +121,7 @@ const AboutUs = () => {
                     <Col xs={24} md={12}>
                         <img
                             src={banner}
-                            alt="Global impact"
+                            alt="Изображение глобального влияния Coursera Plus"
                             style={{ width: "100%", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.3)" }}
                         />
                     </Col>
@@ -138,22 +144,18 @@ const AboutUs = () => {
                 <Title level={2} style={{ textAlign: "center" }}>
                     Часто задаваемые вопросы
                 </Title>
-                <Row gutter={[16, 16]} justify="center">
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card bordered={false}>
-                            <Title level={5}>Как работает Coursera Plus?</Title>
-                            <Paragraph>
-                                Это подписка, которая дает вам неограниченный доступ к более чем 7,000 курсам.
-                            </Paragraph>
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card bordered={false}>
-                            <Title level={5}>Можно ли получить сертификаты?</Title>
-                            <Paragraph>Да, вы можете получать сертификаты после завершения курсов.</Paragraph>
-                        </Card>
-                    </Col>
-                </Row>
+                <Collapse accordion style={{ marginTop: "30px" }} bordered={false}>
+                    <Panel header="Что такое Coursera Plus?" key="1">
+                        <Paragraph>
+                            Coursera Plus — это подписка, которая предоставляет доступ к тысячам курсов и программ сертификации.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Как я могу получить сертификат?" key="2">
+                        <Paragraph>
+                            После завершения курса вам будет предложено пройти тестирование и получить сертификат.
+                        </Paragraph>
+                    </Panel>
+                </Collapse>
             </Content>
 
             {/* Футер */}
@@ -163,6 +165,9 @@ const AboutUs = () => {
                     <div>
                         <GlobalOutlined style={{ marginRight: "8px" }} />
                         Доступно на нескольких языках
+                    </div>
+                    <div>
+                        <a href="https://www.coursera.org/" style={{ color: "#1890ff" }}>Узнать больше</a>
                     </div>
                 </Space>
             </Footer>
