@@ -9,16 +9,12 @@ import {
     Collapse,
     Divider,
     Space,
-    Input,
-    Form,
-    Avatar,
 } from "antd";
 import {
     CheckCircleOutlined,
     RocketOutlined,
     TeamOutlined,
     GlobalOutlined,
-    UserOutlined,
 } from "@ant-design/icons";
 import banner from './Images/banner.jpg';
 import first from './Images/first.jpg';
@@ -87,91 +83,93 @@ const AboutUs = () => {
                 </div>
             </div>
 
-            {/* Секция с преимуществами */}
+            {/* Блок с преимуществами */}
             <Content style={{ padding: "50px", backgroundColor: "#f0f2f5" }}>
-                <Row gutter={[16, 16]} justify="center">
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card hoverable style={{ textAlign: "center" }}>
-                            <RocketOutlined style={{ fontSize: "48px", color: "#007BFF", marginBottom: "10px" }} />
-                            <Title level={4}>Доступ к лучшим курсам</Title>
-                            <Paragraph>Учитесь в удобное время с ведущими преподавателями.</Paragraph>
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card hoverable style={{ textAlign: "center" }}>
-                            <CheckCircleOutlined style={{ fontSize: "48px", color: "#52c41a", marginBottom: "10px" }} />
-                            <Title level={4}>Сертификаты мирового уровня</Title>
-                            <Paragraph>Получите признанные сертификаты.</Paragraph>
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card hoverable style={{ textAlign: "center" }}>
-                            <TeamOutlined style={{ fontSize: "48px", color: "#faad14", marginBottom: "10px" }} />
-                            <Title level={4}>Сообщество экспертов</Title>
-                            <Paragraph>Присоединяйтесь к тысячам студентов.</Paragraph>
-                        </Card>
-                    </Col>
-                </Row>
-            </Content>
-
-            {/* Секция "Работодатели" */}
-            <Content style={{ padding: "50px", backgroundColor: "#fff", textAlign: "center" }}>
-                <Title level={2}>Где вы сможете работать</Title>
-                <Paragraph>
-                    Наши выпускники работают в крупнейших компаниях: Google, Microsoft, Amazon, и других.
-                </Paragraph>
-                <Row gutter={[16, 16]} justify="center">
-                    {/* Логотипы компаний */}
-                    <Col xs={8} sm={6} lg={4}>
-                        <img src="/path/to/google-logo.png" alt="Google" style={{ width: "100%" }} />
-                    </Col>
-                    <Col xs={8} sm={6} lg={4}>
-                        <img src="/path/to/amazon-logo.png" alt="Amazon" style={{ width: "100%" }} />
-                    </Col>
-                    <Col xs={8} sm={6} lg={4}>
-                        <img src="/path/to/microsoft-logo.png" alt="Microsoft" style={{ width: "100%" }} />
-                    </Col>
-                </Row>
-            </Content>
-
-            {/* Отзывы студентов */}
-            <Content style={{ padding: "50px", backgroundColor: "#f0f2f5" }}>
-                <Title level={2} style={{ textAlign: "center", marginBottom: "30px" }}>Отзывы студентов</Title>
+                <Title level={2} style={{ textAlign: "center", marginBottom: "40px" }}>
+                    Почему выбирают нас
+                </Title>
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={12} lg={8}>
-                        <Card>
-                            <Card.Meta
-                                avatar={<Avatar size={64} icon={<UserOutlined />} />}
-                                title="Иван Иванов"
-                                description="Курс изменил мою жизнь! Преподаватели помогли мне найти работу мечты."
-                            />
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
+                            <RocketOutlined style={{ fontSize: "48px", color: "#007BFF", marginBottom: "10px" }} />
+                            <Title level={4}>Доступ к лучшим курсам</Title>
+                            <Paragraph>Учитесь в удобное для вас время, с ведущими преподавателями.</Paragraph>
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={12} lg={8}>
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
+                            <CheckCircleOutlined style={{ fontSize: "48px", color: "#52c41a", marginBottom: "10px" }} />
+                            <Title level={4}>Сертификаты мирового уровня</Title>
+                            <Paragraph>
+                                Получите признанные сертификаты для ускорения своей карьеры.
+                            </Paragraph>
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={12} lg={8}>
+                        <Card hoverable className="card-hoverable" style={{ textAlign: "center" }}>
+                            <TeamOutlined style={{ fontSize: "48px", color: "#faad14", marginBottom: "10px" }} />
+                            <Title level={4}>Сообщество экспертов</Title>
+                            <Paragraph>Присоединяйтесь к тысячам студентов по всему миру.</Paragraph>
                         </Card>
                     </Col>
                 </Row>
             </Content>
 
-            {/* Форма записи на курс */}
+            {/* Секция о глобальном влиянии */}
             <Content style={{ padding: "50px", backgroundColor: "#fff" }}>
-                <Row justify="center">
-                    <Col xs={24} sm={12}>
-                        <Form layout="vertical">
-                            <Form.Item label="Имя">
-                                <Input placeholder="Введите ваше имя" />
-                            </Form.Item>
-                            <Form.Item label="Электронная почта">
-                                <Input placeholder="Введите вашу почту" />
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" block>Записаться на курс</Button>
-                            </Form.Item>
-                        </Form>
+                <Row align="middle" gutter={[32, 32]}>
+                    <Col xs={24} md={12}>
+                        <img
+                            src={banner}
+                            alt="Изображение глобального влияния Coursera Plus"
+                            style={{ width: "100%", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.3)" }}
+                        />
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <Title level={2}>Влияние на весь мир</Title>
+                        <Paragraph style={{ fontSize: "16px", color: "#555" }}>
+                            Мы помогли миллионам студентов достичь своих целей. Программы Coursera Plus доступны для
+                            людей по всему миру.
+                        </Paragraph>
+                        <Button type="primary" size="large" style={{ marginTop: "20px" }}>
+                            Узнать больше
+                        </Button>
                     </Col>
                 </Row>
+            </Content>
+
+            {/* Часто задаваемые вопросы */}
+            <Content style={{ padding: "50px", backgroundColor: "#f0f2f5" }}>
+                <Divider />
+                <Title level={2} style={{ textAlign: "center" }}>
+                    Часто задаваемые вопросы
+                </Title>
+                <Collapse accordion style={{ marginTop: "30px" }} bordered={false}>
+                    <Panel header="Что такое Coursera Plus?" key="1">
+                        <Paragraph>
+                            Coursera Plus — это подписка, которая предоставляет доступ к тысячам курсов и программ сертификации.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Как я могу получить сертификат?" key="2">
+                        <Paragraph>
+                            После завершения курса вам будет предложено пройти тестирование и получить сертификат.
+                        </Paragraph>
+                    </Panel>
+                </Collapse>
             </Content>
 
             {/* Футер */}
             <Footer style={{ textAlign: "center", backgroundColor: "#001529", color: "#fff" }}>
-                <div>© Coursera Plus 2024 | Все права защищены</div>
+                <Space direction="vertical">
+                    <div>© Coursera Plus 2024 | Все права защищены</div>
+                    <div>
+                        <GlobalOutlined style={{ marginRight: "8px" }} />
+                        Доступно на нескольких языках
+                    </div>
+                    <div>
+                        <a href="https://www.coursera.org/" style={{ color: "#1890ff" }}>Узнать больше</a>
+                    </div>
+                </Space>
             </Footer>
         </Layout>
     );
