@@ -60,7 +60,7 @@ const AllCourse = () => {
 
                                 <CardContent>
                                     <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
-                                        {course.name}
+                                        {course.name.substring(0, 20)}...
                                     </Typography>
                                     <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                                         {course.description.substring(0, 20)}...

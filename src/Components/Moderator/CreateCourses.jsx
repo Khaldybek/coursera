@@ -2,18 +2,20 @@ import React from "react";
 import { Form, Input, Button } from "antd";
 import CoursesService from "../../services/courses.service.js";
 
-export default function UserCreate() {
+export default function CreateCourses({ onCourseCreated }) {
     const [form] = Form.useForm();
 
     const handleSave = async (values) => {
         try {
             // Отправка данных на сервер через CoursesService
-            await CoursesService.create(values.name, values.description, values.companyName);
-            // Вы можете добавить уведомление об успешной операции, например:
-            alert('Курс успешно создан!');
-            form.resetFields(); // Очистка полей формы после успешного сохранения
+            const newCourse = await CoursesService.create(values.name, values.description, values.companyName);
+            // Передаем новый курс в родительский компонент для обновления списка
+            onCourseCreated(newCourse);
+
+            // Очистка полей формы после успешного сохранения
+            form.resetFields();
         } catch (error) {
-            // Обработка ошибок, например, выводим сообщение об ошибке
+            // Обработка ошибок
             alert('Произошла ошибка при создании курса.');
         }
     };
