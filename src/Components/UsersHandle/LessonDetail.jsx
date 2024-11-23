@@ -13,10 +13,14 @@ import {
     FormControlLabel,
     Radio,
     Button,
+    LinearProgress,
 } from "@mui/material";
+import { CheckCircleOutline, ErrorOutline, Assessment } from "@mui/icons-material";
 import AuthService from "../../services/auth.service.js";
+import {blue} from "@mui/material/colors";
 
 const LessonDetail = () => {
+
     const { lessonId } = useParams();
     const user = AuthService.getCurrentUser();
 
@@ -143,39 +147,92 @@ const LessonDetail = () => {
             </AppBar>
 
             {selectedTab === 0 && (
-                <Box sx={{ mt: 3 }}>
-                    {topics.map((topic) => (
-                        <Card key={topic.id} sx={{ mb: 2, padding: 2 }}>
-                            <CardContent>
-                                <Typography variant="h5" sx={{ fontWeight: "bold", mb: 1 }}>
-                                    {topic.name}
-                                </Typography>
-                                <Typography variant="body1">{topic.description}</Typography>
-                            </CardContent>
-                        </Card>
+                <Box sx={{ mt: 3, padding: 3, backgroundColor: "#f9f9f9", borderRadius: 2 }}>
+                    <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold", color: "text.primary" }}>
+                        Topics Overview
+                    </Typography>
+                    {topics.map((topic, index) => (
+                        <Box key={topic.id} sx={{ mb: 3 }}>
+                            {/* Заголовок темы */}
+                            <Typography variant="h5" sx={{ fontWeight: "bold", color: "text.primary" }}>
+                                {index + 1}. {topic.name}
+                            </Typography>
+
+                            {/* Описание темы */}
+                            <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.6, mb: 1 }}>
+                                {topic.description}
+                            </Typography>
+
+                            {/* Детальный текст */}
+                            <Typography variant="h6" sx={{ color: "text.secondary", fontStyle: "italic", lineHeight: 1.6 }}>
+                                {topic.title}
+                            </Typography>
+                        </Box>
                     ))}
                 </Box>
             )}
 
             {selectedTab === 1 &&
                 (testLocked ? (
-                    <Box sx={{ textAlign: "center", padding: 4 }}>
-                        <Typography variant="h5" color="error" sx={{ mb: 2 }}>
-                            Вы уже прошли все тесты по этой теме.
-                        </Typography>
-                        <Typography variant="body1" sx={{ mb: 1 }}>
-                            <strong>Всего вопросов:</strong> {testSummary.totalQuestions}
-                        </Typography>
-                        <Typography variant="body1" sx={{ mb: 1, color: "green" }}>
-                            <strong>Правильных ответов:</strong> {testSummary.correctAnswers}
-                        </Typography>
-                        <Typography variant="body1" sx={{ mb: 1, color: "red" }}>
-                            <strong>Неправильных ответов:</strong> {testSummary.incorrectAnswers}
-                        </Typography>
-                        <Typography variant="body1">
-                            <strong>Процент успешности:</strong> {testSummary.overallPercentage}%
-                        </Typography>
-                    </Box>
+                    <Card sx={{ maxWidth: 600, margin: "0 auto", p: 4, textAlign: "center", boxShadow: 3, borderRadius: 3 }}>
+                        <CardContent>
+                            <Typography variant="h4" color="error" sx={{ mb: 3, fontWeight: "bold" }}>
+                                Вы уже прошли все тесты по этой теме!
+                            </Typography>
+
+                            {/* Общее количество вопросов */}
+                            <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+                                <Assessment sx={{ fontSize: 30, color: "blue" }} />
+                                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                    Всего вопросов:
+                                </Typography>
+                                <Typography variant="h6" color="text.primary">
+                                    {testSummary.totalQuestions}
+                                </Typography>
+                            </Box>
+
+                            {/* Правильные ответы */}
+                            <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+                                <CheckCircleOutline sx={{ fontSize: 30, color: "green" }} />
+                                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                    Правильных ответов:
+                                </Typography>
+                                <Typography variant="h6" color="green">
+                                    {testSummary.correctAnswers}
+                                </Typography>
+                            </Box>
+
+                            {/* Неправильные ответы */}
+                            <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+                                <ErrorOutline sx={{ fontSize: 30, color: "red" }} />
+                                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                    Неправильных ответов:
+                                </Typography>
+                                <Typography variant="h6" color="red">
+                                    {testSummary.incorrectAnswers}
+                                </Typography>
+                            </Box>
+
+                            {/* Процент успешности */}
+                            <Box sx={{ mt: 3 }}>
+                                <Typography variant="h6" sx={{ mb: 1 }}>
+                                    <strong>Процент успешности:</strong> {testSummary.overallPercentage}%
+                                </Typography>
+                                <LinearProgress
+                                    variant="determinate"
+                                    value={testSummary.overallPercentage}
+                                    sx={{
+                                        height: 12,
+                                        borderRadius: 6,
+                                        backgroundColor: "#f0f0f0",
+                                        "& .MuiLinearProgress-bar": {
+                                            backgroundColor:blue,
+                                        },
+                                    }}
+                                />
+                            </Box>
+                        </CardContent>
+                    </Card>
                 ) : (
                     <>
                         <Typography variant="h5" sx={{ mb: 2, color: "#007BFF", fontWeight: "bold" }}>
