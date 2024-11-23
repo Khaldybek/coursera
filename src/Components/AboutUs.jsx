@@ -29,15 +29,8 @@ const AboutUs = () => {
             {/* Шапка */}
             <Header style={{ backgroundColor: "#001529", color: "#fff" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div style={{ fontSize: "20px", fontWeight: "bold" }}>Coursera Plus</div>
-                    <Button
-                        type="primary"
-                        shape="round"
-                        size="large"
-                        style={{ backgroundColor: "#007BFF", borderColor: "#0056b3" }}
-                    >
-                        Присоединиться
-                    </Button>
+                    <div style={{ fontSize: "20px", fontWeight: "bold" ,width: "100%"}}>Coursera</div>
+
                 </div>
             </Header>
 
@@ -59,7 +52,7 @@ const AboutUs = () => {
             >
                 <div style={{ background: "rgba(0, 0, 0, 0.5)", padding: "30px", borderRadius: "10px" }}>
                     <Title style={{ color: "#fff", fontSize: "42px", marginBottom: "20px" }}>
-                        Откройте новые возможности с Coursera Plus
+                        Откройте новые возможности с Coursera
                     </Title>
                     <Paragraph style={{ color: "#f0f0f0", fontSize: "18px" }}>
                         Мы предоставляем неограниченный доступ к курсам, которые изменят вашу карьеру и жизнь.

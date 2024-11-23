@@ -3,4 +3,19 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
+    gap: 20px; /* Расстояние между элементами */
+}
+
+
+
+.course-item .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.course-item .description {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #555;
 }

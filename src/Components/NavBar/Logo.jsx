@@ -1,10 +1,17 @@
 import React from 'react';
-import CodepenCircleOutlined from '@ant-design/icons/CodepenCircleOutlined';
+import { useNavigate } from 'react-router-dom';
+import { CodepenCircleOutlined } from '@ant-design/icons';
 const Logo = () => {
+    const navigate = useNavigate();
+
+    const handleLogoClick = () => {
+        navigate('/'); // Переход на главную страницу
+    };
+
     return (
-        <div className="logo">
+        <div className="logo" >
             <div className="logo-icon">
-                <CodepenCircleOutlined />
+                <CodepenCircleOutlined onClick={handleLogoClick} style={{ cursor: 'pointer' }} />
             </div>
         </div>
     );

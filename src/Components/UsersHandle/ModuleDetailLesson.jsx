@@ -86,14 +86,12 @@ const LessonCard = ({ lesson, navigate }) => {
                 <Avatar src={SampleImage} sx={{ width: 50, height: 50, mr: 2 }} />
                 <Box>
                     <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#333', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {lesson.name}
+                        {lesson.name.substring(0, 17)}...
                     </Typography>
                     <Typography variant="subtitle2" sx={{ fontSize: '0.85rem', color: '#666' }}>
                         {lesson.moduleName} • {lesson.level || "N/A"} уровень
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#f4b400', fontSize: '0.8rem', display: 'flex', alignItems: 'center' }}>
-                        <strong>⭐⭐⭐⭐⭐</strong> 4.5
-                    </Typography>
+
                 </Box>
             </Box>
 

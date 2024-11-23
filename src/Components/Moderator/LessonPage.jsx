@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Card, Typography, List, Spin, notification, Modal, Button, Popconfirm, Input } from 'antd';
+import { Card, Typography, List, Spin,notification, Modal, Button, Popconfirm, Input } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import TopicService from "../../services/topic.service.js"; // Предположим, у нас есть TopicService для работы с API тем
-
+const { TextArea } = Input;
 const { Title, Text } = Typography;
 
 export default function LessonPage() {
@@ -143,13 +143,13 @@ export default function LessonPage() {
                         placeholder="Название темы"
                         style={{ marginBottom: '10px' }}
                     />
-                    <Input
+                    <TextArea
                         value={newTopic.description}
                         onChange={(e) => setNewTopic(prev => ({ ...prev, description: e.target.value }))}
                         placeholder="Описание темы"
                         style={{ marginBottom: '10px' }}
                     />
-                    <Input
+                    <TextArea
                         value={newTopic.title}
                         onChange={(e) => setNewTopic(prev => ({ ...prev, title: e.target.value }))}
                         placeholder="Заголовок"

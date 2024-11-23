@@ -35,7 +35,7 @@ const UsersCourse = () => {
             {loading ? (
                 <CircularProgress size={50} />
             ) : (
-                <Grid container spacing={4} justifyContent="center"> {/* Increase spacing */}
+                <Grid container spacing={4} justifyContent="center" margin="10px"> {/* Increase spacing */}
                     {courses.map((course) => (
                         <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
                             <UserCoursItem
