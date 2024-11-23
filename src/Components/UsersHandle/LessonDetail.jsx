@@ -18,6 +18,7 @@ import {
 import { CheckCircleOutline, ErrorOutline, Assessment } from "@mui/icons-material";
 import AuthService from "../../services/auth.service.js";
 import {blue} from "@mui/material/colors";
+import { getPresignedDownloadUrl, downloadFile } from "../../services/minio.service.js";
 
 const LessonDetail = () => {
 
@@ -66,6 +67,22 @@ const LessonDetail = () => {
     }, [lessonId, user.id]);
 
     const handleTabChange = (event, newValue) => setSelectedTab(newValue);
+
+    const handleFileDownload = async () => {
+        if (lesson && lesson.fileUrl) {
+            try {
+                const filePath = lesson.fileUrl.replace(`http://localhost:9000/cousera/`, "");
+                const presignedUrl = await getPresignedDownloadUrl(filePath);
+                await downloadFile(presignedUrl);
+                alert("Файл успешно скачан!");
+            } catch (error) {
+                console.error("Ошибка при скачивании файла:", error);
+                alert("Не удалось скачать файл. Попробуйте позже.");
+            }
+        } else {
+            alert("Файл не найден.");
+        }
+    };
 
     const handleOptionChange = (event) => setSelectedOption(event.target.value);
 
@@ -141,8 +158,27 @@ const LessonDetail = () => {
                     centered
                     TabIndicatorProps={{ style: { backgroundColor: "transparent" } }}
                 >
-                    <Tab label="Темы" sx={{ color: selectedTab === 0 ? "black" : "grey", fontWeight: selectedTab === 0 ? "bold" : "normal" }} />
-                    <Tab label="Тесты" sx={{ color: selectedTab === 1 ? "red" : "grey", fontWeight: selectedTab === 1 ? "bold" : "normal" }} />
+                    <Tab
+                        label="Темы"
+                        sx={{
+                            color: selectedTab === 0 ? "black" : "grey",
+                            fontWeight: selectedTab === 0 ? "bold" : "normal",
+                        }}
+                    />
+                    <Tab
+                        label="Тесты"
+                        sx={{
+                            color: selectedTab === 1 ? "black" : "grey",
+                            fontWeight: selectedTab === 1 ? "bold" : "normal",
+                        }}
+                    />
+                    <Tab
+                        label="Прикрепленный файл"
+                        sx={{
+                            color: selectedTab === 2 ? "black" : "grey",
+                            fontWeight: selectedTab === 2 ? "bold" : "normal",
+                        }}
+                    />
                 </Tabs>
             </AppBar>
 
@@ -265,7 +301,46 @@ const LessonDetail = () => {
                             {currentTestIndex < tests.length - 1 ? "Следующий вопрос" : "Завершить тест"}
                         </Button>
                     </>
-                ))}
+                )
+
+    )}
+{selectedTab === 2 && lesson?.fileUrl && (
+    <Box>
+        <CardContent>
+            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
+                Прикрепленный файл
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
+                {lesson?.name}
+            </Typography>
+            {lesson?.fileUrl ? (
+                /\.(jpe?g|png|gif|bmp|webp)$/i.test(lesson.fileUrl) ? (
+                    <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                        <img
+                            src={lesson.fileUrl}
+                            alt="Attached File"
+                            style={{ maxWidth: "100%", maxHeight: "300px", borderRadius: "8px" }}
+                        />
+                    </Box>
+                ) : (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 2 }}
+                        onClick={handleFileDownload}
+                    >
+                        Скачать файл
+                    </Button>
+                )
+            ) : (
+                <Typography color="text.secondary" sx={{ mt: 2 }}>
+                    Файл не прикреплен.
+                </Typography>
+            )}
+        </CardContent>
+
+    </Box>
+)}
         </Box>
     );
 };

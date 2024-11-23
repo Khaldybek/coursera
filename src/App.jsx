@@ -33,6 +33,15 @@ import CourseAnalysis from "./Components/UsersHandle/CourseAnalysis.jsx";
 import EventBus from "./common/EventBus";
 import Navbar from "./Components/NavBar/Navbar.jsx";
 import CoursesOverview from "./Components/Moderator/CoursesOverview.jsx";
+
+
+
+
+
+
+import FileUploader from "./Components/minio/FileUploader.jsx";
+
+
 const App = () => {
     const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -94,12 +103,14 @@ const App = () => {
 
                                     <Route path="/all-courses/:courseId" element={<AllCourseDetail />} />
                                     <Route path="/all-courses" element={<AllCourse />} />
+                                    <Route path="/user-cours" element={<UsersCourse />} />
                                     <Route path="/analysis" element={<CourseAnalysis />} />
                                     <Route path="/my-courses" element={<UsersCourse />} />
                                     <Route path="/my-courses/:courseId" element={<CourseDetail />} />
                                     <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetailLesson />} />
                                     <Route path="/lesson/:lessonId" element={<LessonDetail />} />
 
+                                    <Route path="/file" element={<FileUploader />} />
 
                                 </>
                             )}

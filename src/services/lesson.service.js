@@ -3,22 +3,26 @@ import axios from "axios";
 const API_URL = "http://localhost:8000/api/v1/lessons";
 const API_URL_BASE = "http://localhost:8000/api";
 
-const createLesson = async (moduleId, lessonName, lessonDescription, level) => {
+const createLesson = async (moduleId, lessonName, lessonDescription, level, file) => {
+    const formData = new FormData();
+    formData.append("lessonName", lessonName);
+    formData.append("lessonDescription", lessonDescription);
+    formData.append("level", level);
+    if (file) {
+        formData.append("file", file); // Добавляем файл
+    }
+
+    console.log("Данные для отправки на сервер:", formData.get("file")); // Лог файла
+
     try {
-        const response = await axios.post(
-            `${API_URL}/${moduleId}`,
-            null,
-            {
-                params: {
-                    lessonName,
-                    lessonDescription,
-                    level,
-                }
-            }
-        );
+        const response = await axios.post(`${API_URL}/${moduleId}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
         return response.data;
     } catch (error) {
-        console.log("Error creating lesson:", error);
+        console.error("Ошибка при создании урока:", error);
         throw error;
     }
 };
