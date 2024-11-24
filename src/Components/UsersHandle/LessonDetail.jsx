@@ -347,7 +347,6 @@ const LessonDetail = () => {
                 </Box>
             ) : (
                 <Box sx={{ textAlign: "center", mt: 5 }}>
-                    <Empty description="Нет прикрепленного файла для скачивания" />
                 </Box>
             )}
         </Box>

@@ -57,11 +57,6 @@ const MenuList = () => {
         ...(role === "MODERATOR" ? [
 
             {
-                label: "Создать Курсы",
-                key: "create courses",
-                icon: <PlusSquareOutlined style={{ fontSize: "20px" }} />
-            },
-            {
                 label: "Мои Курсы",
                 key: "survey",
                 icon: <ProfileOutlined style={{ fontSize: "20px" }} />,
