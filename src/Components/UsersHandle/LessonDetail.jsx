@@ -78,7 +78,6 @@ const LessonDetail = () => {
             try {
                 const filePath = lesson.fileUrl.replace(`http://localhost:9000/cousera/`, "");
                 const presignedUrl = await getPresignedDownloadUrl(filePath);
-                setImegs(presignedUrl)
                 await downloadFile(presignedUrl);
                 alert("Файл успешно скачан!");
             } catch (error) {
@@ -184,48 +183,64 @@ const LessonDetail = () => {
                     <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold", color: "text.primary" }}>
                         Темы урока
                     </Typography>
-                    {topics.map((topic, index) => (
-                        <Box key={topic.id} sx={{ mb: 3 }}>
-                            <Typography variant="h5" sx={{ fontWeight: "bold", color: "text.primary" }}>
-                                {index + 1}. {topic.name}
-                            </Typography>
-                            <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.6, mb: 1 }}>
-                                {topic.description}
-                            </Typography>
-                            <Typography variant="h6" sx={{ color: "text.secondary", fontStyle: "italic", lineHeight: 1.6 }}>
-                                {topic.title}
-                            </Typography>
-
-                            {topic.files.map((file, fileIndex) => (
-                                <Box key={fileIndex} sx={{ mt: 2 }}>
-                                    {file.downloadUrl ? (
-                                        file.contentType.startsWith("image/") ? (
-                                            <img
-                                                src={file.downloadUrl}
-                                                alt={`Файл темы ${topic.name}`}
-                                                style={{ maxWidth: "100%", borderRadius: 8 }}
-                                            />
-                                        ) : file.contentType.startsWith("video/") ? (
-                                            <video
-                                                controls
-                                                src={file.downloadUrl}
-                                                style={{ maxWidth: "100%", borderRadius: 8 }}
-                                            />
+                    {topics.length > 0 ? (
+                        topics.map((topic, index) => (
+                            <Box key={topic.id} sx={{ mb: 3 }}>
+                                <Typography variant="h5" sx={{ fontWeight: "bold", color: "text.primary" }}>
+                                    {index + 1}. {topic.name}
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.6, mb: 1 }}>
+                                    {topic.description}
+                                </Typography>
+                                <Typography variant="h6" sx={{ color: "text.secondary", fontStyle: "italic", lineHeight: 1.6 }}>
+                                    {topic.title}
+                                </Typography>
+                                {topic.files.map((file, fileIndex) => (
+                                    <Box key={fileIndex} sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                                        {file.downloadUrl ? (
+                                            file.contentType.startsWith("image/") ? (
+                                                <img
+                                                    src={file.downloadUrl}
+                                                    alt={`Файл темы ${topic.name}`}
+                                                    style={{
+                                                        maxWidth: "900px",
+                                                        maxHeight: "1000px",
+                                                        borderRadius: 8,
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                            ) : file.contentType.startsWith("video/") ? (
+                                                <video
+                                                    controls
+                                                    muted
+                                                    preload="metadata"
+                                                    src={file.downloadUrl}
+                                                    style={{
+                                                        maxWidth: "1000px",
+                                                        maxHeight: "1000px",
+                                                        borderRadius: 8,
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                                                    Неподдерживаемый формат: {file.contentType}
+                                                </Typography>
+                                            )
                                         ) : (
-                                            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                                Неподдерживаемый формат: {file.contentType}
+                                            <Typography variant="body2" sx={{ color: "error.main" }}>
+                                                URL для скачивания отсутствует
                                             </Typography>
-                                        )
-                                    ) : (
-                                        <Typography variant="body2" sx={{ color: "error.main" }}>
-                                            URL для скачивания отсутствует
-                                        </Typography>
-                                    )}
-                                </Box>
-                            ))}
-
+                                        )}
+                                    </Box>
+                                ))}
+                            </Box>
+                        ))
+                    ) : (
+                        <Box sx={{ textAlign: "center", mt: 5 }}>
+                            <Empty description="Нет данных по темам" />
                         </Box>
-                    ))}
+                    )}
                 </Box>
             )}
 
@@ -321,7 +336,7 @@ const LessonDetail = () => {
                     </>
                 ))}
 
-            {selectedTab === 2 && lesson?.fileUrl && (
+            {selectedTab === 2 && lesson?.fileUrl ? (
                 <Box sx={{ mt: 3, textAlign: "center" }}>
                     <Typography variant="body1" sx={{ mb: 3 }}>
                         Вы можете скачать прикрепленный файл по кнопке ниже:
@@ -329,6 +344,10 @@ const LessonDetail = () => {
                     <Button variant="contained" color="primary" onClick={handleFileDownload}>
                         Скачать файл
                     </Button>
+                </Box>
+            ) : (
+                <Box sx={{ textAlign: "center", mt: 5 }}>
+                    <Empty description="Нет прикрепленного файла для скачивания" />
                 </Box>
             )}
         </Box>
