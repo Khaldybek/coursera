@@ -25,7 +25,8 @@ export const fetchPresignedUrls = async (files) => {
                     return file;
                 }
                 const filePath = file.fileUrl.replace(`http://localhost:9000/cousera/`, "");
-                return { ...file, filePath };
+                const downloadUrl = await getPresignedDownloadUrl(filePath);
+                return { ...file, downloadUrl };
             })
         );
     } catch (error) {

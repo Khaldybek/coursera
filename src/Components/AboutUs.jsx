@@ -19,10 +19,6 @@ import {
 } from "@ant-design/icons";
 import banner from './Images/banner.jpg';
 import first from './Images/first.jpg';
-import b1 from './Images/brand01.png';
-import b2 from './Images/brand01.png';
-import b3 from './Images/brand01.png';
-import b4 from './Images/brand01.png';
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 const { Panel } = Collapse;

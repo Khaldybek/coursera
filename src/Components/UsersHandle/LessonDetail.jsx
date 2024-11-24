@@ -20,7 +20,7 @@ import { Empty } from "antd";
 import AuthService from "../../services/auth.service.js";
 import { blue } from "@mui/material/colors";
 import { getPresignedDownloadUrl, downloadFile } from "../../services/minio.service.js";
-
+import TopicService from "../../services/topic.service.js";
 const LessonDetail = () => {
     const { lessonId } = useParams();
     const user = AuthService.getCurrentUser();
