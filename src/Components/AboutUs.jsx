@@ -9,6 +9,7 @@ import {
     Collapse,
     Divider,
     Space,
+    Carousel,
 } from "antd";
 import {
     CheckCircleOutlined,
@@ -18,7 +19,10 @@ import {
 } from "@ant-design/icons";
 import banner from './Images/banner.jpg';
 import first from './Images/first.jpg';
-
+import b1 from './Images/brand01.png';
+import b2 from './Images/brand01.png';
+import b3 from './Images/brand01.png';
+import b4 from './Images/brand01.png';
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 const { Panel } = Collapse;
@@ -67,9 +71,6 @@ const AboutUs = () => {
                                 fontWeight: "bold",
                             }}
                         >
-                            Начать учиться
-                        </Button>
-                        <Button type="default" size="large" style={{ fontWeight: "bold" }}>
                             Подробнее
                         </Button>
                     </Space>
@@ -121,7 +122,7 @@ const AboutUs = () => {
                     <Col xs={24} md={12}>
                         <Title level={2}>Влияние на весь мир</Title>
                         <Paragraph style={{ fontSize: "16px", color: "#555" }}>
-                            Мы помогли миллионам студентов достичь своих целей. Программы Coursera Plus доступны для
+                            Мы помогли миллионам студентов достичь своих целей. Программы Coursera доступны для
                             людей по всему миру.
                         </Paragraph>
                         <Button type="primary" size="large" style={{ marginTop: "20px" }}>
@@ -131,25 +132,47 @@ const AboutUs = () => {
                 </Row>
             </Content>
 
+
             {/* Часто задаваемые вопросы */}
             <Content style={{ padding: "50px", backgroundColor: "#f0f2f5" }}>
                 <Divider />
                 <Title level={2} style={{ textAlign: "center" }}>
                     Часто задаваемые вопросы
                 </Title>
-                <Collapse accordion style={{ marginTop: "30px" }} bordered={false}>
-                    <Panel header="Что такое Coursera Plus?" key="1">
-                        <Paragraph>
-                            Coursera Plus — это подписка, которая предоставляет доступ к тысячам курсов и программ сертификации.
+                <Collapse accordion style={{ marginTop: "30px", fontSize: "18px" }} bordered={false}>
+                    <Panel header="Что такое образовательный центр для разработчиков?" key="1">
+                        <Paragraph style={{ fontSize: "17px" }}>
+                            Наш образовательный центр предоставляет высококачественные курсы для начинающих и опытных разработчиков. Мы предлагаем обучение в самых востребованных технологиях и языках программирования, таких как JavaScript, Python, React, и многое другое.
                         </Paragraph>
                     </Panel>
-                    <Panel header="Как я могу получить сертификат?" key="2">
-                        <Paragraph>
-                            После завершения курса вам будет предложено пройти тестирование и получить сертификат.
+                    <Panel header="Какие курсы предлагает ваш центр?" key="2">
+                        <Paragraph style={{ fontSize: "17px" }}>
+                            Мы предлагаем курсы, которые помогут вам стать полноценным разработчиком. Наши программы включают как базовые знания, так и углубленные темы, включая фронтенд и бэкенд разработку, алгоритмы, базовые принципы DevOps и многое другое.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Какие преимущества вашего обучения для будущих разработчиков?" key="3">
+                        <Paragraph style={{ fontSize: "17px" }}>
+                            Мы обучаем на основе реальных проектов, даем студентам возможность развивать практические навыки, которые будут полезны в реальной рабочей среде. Также мы предлагаем поддержку менторов и доступ к сетям профессионалов в IT.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Сколько времени занимает обучение?" key="4">
+                        <Paragraph style={{ fontSize: "17px" }}>
+                            Время обучения зависит от выбранного курса. Мы предлагаем как интенсивные курсы (1-2 месяца), так и более длительные программы (6 месяцев), чтобы обеспечить глубокое освоение материала.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Какие возможности трудоустройства я получу после завершения курса?" key="5">
+                        <Paragraph style={{ fontSize: "17px" }}>
+                            Мы сотрудничаем с крупными технологическими компаниями и помогаем нашим выпускникам найти работу. Вы получите доступ к нашей сети вакансий и рекомендациям, а также сможете пройти стажировку в компаниях-партнерах.
+                        </Paragraph>
+                    </Panel>
+                    <Panel header="Какие сертификаты я получу после завершения курса?" key="6">
+                        <Paragraph style={{ fontSize: "17px" }}>
+                            После завершения каждого курса вы получите сертификат, который подтвердит ваши знания и навыки в выбранной области. Эти сертификаты признаны ведущими компаниями и помогут вам в карьерном росте.
                         </Paragraph>
                     </Panel>
                 </Collapse>
             </Content>
+
 
             {/* Футер */}
             <Footer style={{ textAlign: "center", backgroundColor: "#001529", color: "#fff" }}>
@@ -160,7 +183,7 @@ const AboutUs = () => {
                         Доступно на нескольких языках
                     </div>
                     <div>
-                        <a href="https://www.coursera.org/" style={{ color: "#1890ff" }}>Узнать больше</a>
+                        <a href="/all-courses" style={{ color: "#1890ff" }}>Узнать больше</a>
                     </div>
                 </Space>
             </Footer>

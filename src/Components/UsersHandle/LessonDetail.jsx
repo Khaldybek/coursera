@@ -16,12 +16,12 @@ import {
     LinearProgress,
 } from "@mui/material";
 import { CheckCircleOutline, ErrorOutline, Assessment } from "@mui/icons-material";
+import { Empty } from "antd";
 import AuthService from "../../services/auth.service.js";
-import {blue} from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import { getPresignedDownloadUrl, downloadFile } from "../../services/minio.service.js";
 
 const LessonDetail = () => {
-
     const { lessonId } = useParams();
     const user = AuthService.getCurrentUser();
 
@@ -37,8 +37,9 @@ const LessonDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const testLocked = testSummary?.totalQuestions > 0 &&
-        (testSummary.correctAnswers + testSummary.incorrectAnswers >= testSummary.totalQuestions);
+    const testLocked =
+        testSummary?.totalQuestions > 0 &&
+        testSummary.correctAnswers + testSummary.incorrectAnswers >= testSummary.totalQuestions;
 
     useEffect(() => {
         const fetchLessonData = async () => {
@@ -87,29 +88,22 @@ const LessonDetail = () => {
     const handleOptionChange = (event) => setSelectedOption(event.target.value);
 
     const handleNextQuestion = () => {
-        if (!selectedOption) return; // Если ответ не выбран, не продолжать
+        if (!selectedOption) return;
 
-        // Добавляем ответ в результаты
         const currentResult = { testId: tests[currentTestIndex].id, selectedOption };
 
-        setResults((prev) => [...prev, currentResult]); // Добавляем ответ в массив
+        setResults((prev) => [...prev, currentResult]);
+        setSelectedOption(null);
 
-        setSelectedOption(null); // Очищаем выбранный вариант
-
-        // Если это последний вопрос, сразу отправляем результаты
         if (currentTestIndex === tests.length - 1) {
             submitResults();
         } else {
-            setCurrentTestIndex((prev) => prev + 1); // Переходим к следующему вопросу
+            setCurrentTestIndex((prev) => prev + 1);
         }
     };
 
     const submitResults = async () => {
-
-        console.log("Отправка результатов. Массив результатов:", results);
-        results.push({ testId: tests[currentTestIndex].id, selectedOption })
-
-        console.log("Отправка результатов. Массив результатов:", results);
+        results.push({ testId: tests[currentTestIndex].id, selectedOption });
 
         try {
             const response = await fetch(`http://localhost:8000/api/tests/take?userId=${user.id}`, {
@@ -119,15 +113,13 @@ const LessonDetail = () => {
             });
 
             const updatedSummary = await response.json();
-            setTestSummary(updatedSummary); // Обновляем результаты
-            alert("Тест успешно завершен!"); // Уведомляем пользователя
+            setTestSummary(updatedSummary);
+            alert("Тест успешно завершен!");
         } catch (err) {
             console.error("Ошибка при отправке результатов:", err);
             alert("Ошибка при отправке результатов. Попробуйте позже.");
         }
     };
-
-
 
     if (loading) {
         return (
@@ -185,21 +177,16 @@ const LessonDetail = () => {
             {selectedTab === 0 && (
                 <Box sx={{ mt: 3, padding: 3, backgroundColor: "#f9f9f9", borderRadius: 2 }}>
                     <Typography variant="h4" sx={{ mb: 3, fontWeight: "bold", color: "text.primary" }}>
-                        Topics Overview
+                        Темы урока
                     </Typography>
                     {topics.map((topic, index) => (
                         <Box key={topic.id} sx={{ mb: 3 }}>
-                            {/* Заголовок темы */}
                             <Typography variant="h5" sx={{ fontWeight: "bold", color: "text.primary" }}>
                                 {index + 1}. {topic.name}
                             </Typography>
-
-                            {/* Описание темы */}
                             <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.6, mb: 1 }}>
                                 {topic.description}
                             </Typography>
-
-                            {/* Детальный текст */}
                             <Typography variant="h6" sx={{ color: "text.secondary", fontStyle: "italic", lineHeight: 1.6 }}>
                                 {topic.title}
                             </Typography>
@@ -209,14 +196,16 @@ const LessonDetail = () => {
             )}
 
             {selectedTab === 1 &&
-                (testLocked ? (
+                (tests.length === 0 ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                        <Empty description="Тесты отсутствуют" />
+                    </Box>
+                ) : testLocked ? (
                     <Card sx={{ maxWidth: 600, margin: "0 auto", p: 4, textAlign: "center", boxShadow: 3, borderRadius: 3 }}>
                         <CardContent>
                             <Typography variant="h4" color="error" sx={{ mb: 3, fontWeight: "bold" }}>
                                 Вы уже прошли все тесты по этой теме!
                             </Typography>
-
-                            {/* Общее количество вопросов */}
                             <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                                 <Assessment sx={{ fontSize: 30, color: "blue" }} />
                                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -226,8 +215,6 @@ const LessonDetail = () => {
                                     {testSummary.totalQuestions}
                                 </Typography>
                             </Box>
-
-                            {/* Правильные ответы */}
                             <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                                 <CheckCircleOutline sx={{ fontSize: 30, color: "green" }} />
                                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -237,8 +224,6 @@ const LessonDetail = () => {
                                     {testSummary.correctAnswers}
                                 </Typography>
                             </Box>
-
-                            {/* Неправильные ответы */}
                             <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                                 <ErrorOutline sx={{ fontSize: 30, color: "red" }} />
                                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -248,8 +233,6 @@ const LessonDetail = () => {
                                     {testSummary.incorrectAnswers}
                                 </Typography>
                             </Box>
-
-                            {/* Процент успешности */}
                             <Box sx={{ mt: 3 }}>
                                 <Typography variant="h6" sx={{ mb: 1 }}>
                                     <strong>Процент успешности:</strong> {testSummary.overallPercentage}%
@@ -262,7 +245,7 @@ const LessonDetail = () => {
                                         borderRadius: 6,
                                         backgroundColor: "#f0f0f0",
                                         "& .MuiLinearProgress-bar": {
-                                            backgroundColor:blue,
+                                            backgroundColor: blue,
                                         },
                                     }}
                                 />
@@ -301,46 +284,18 @@ const LessonDetail = () => {
                             {currentTestIndex < tests.length - 1 ? "Следующий вопрос" : "Завершить тест"}
                         </Button>
                     </>
-                )
+                ))}
 
-    )}
-{selectedTab === 2 && lesson?.fileUrl && (
-    <Box>
-        <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                Прикрепленный файл
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                {lesson?.name}
-            </Typography>
-            {lesson?.fileUrl ? (
-                /\.(jpe?g|png|gif|bmp|webp)$/i.test(lesson.fileUrl) ? (
-                    <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
-                        <img
-                            src={lesson.fileUrl}
-                            alt="Attached File"
-                            style={{ maxWidth: "100%", maxHeight: "300px", borderRadius: "8px" }}
-                        />
-                    </Box>
-                ) : (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        sx={{ mt: 2 }}
-                        onClick={handleFileDownload}
-                    >
+            {selectedTab === 2 && lesson?.fileUrl && (
+                <Box sx={{ mt: 3, textAlign: "center" }}>
+                    <Typography variant="body1" sx={{ mb: 3 }}>
+                        Вы можете скачать прикрепленный файл по кнопке ниже:
+                    </Typography>
+                    <Button variant="contained" color="primary" onClick={handleFileDownload}>
                         Скачать файл
                     </Button>
-                )
-            ) : (
-                <Typography color="text.secondary" sx={{ mt: 2 }}>
-                    Файл не прикреплен.
-                </Typography>
+                </Box>
             )}
-        </CardContent>
-
-    </Box>
-)}
         </Box>
     );
 };
