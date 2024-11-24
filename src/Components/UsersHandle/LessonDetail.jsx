@@ -20,7 +20,8 @@ import { Empty } from "antd";
 import AuthService from "../../services/auth.service.js";
 import { blue } from "@mui/material/colors";
 import { getPresignedDownloadUrl, downloadFile } from "../../services/minio.service.js";
-import TopicService from "../../services/topic.service.js";
+import TopicService, {fetchPresignedUrls} from "../../services/topic.service.js";
+
 const LessonDetail = () => {
     const { lessonId } = useParams();
     const user = AuthService.getCurrentUser();
@@ -29,6 +30,7 @@ const LessonDetail = () => {
     const [topics, setTopics] = useState([]);
     const [tests, setTests] = useState([]);
     const [testSummary, setTestSummary] = useState(null);
+    const [imegs, setImegs] = useState(null);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [currentTestIndex, setCurrentTestIndex] = useState(0);
@@ -48,13 +50,15 @@ const LessonDetail = () => {
                     fetch(`http://localhost:8000/api/v1/lessons/${lessonId}`).then((res) => res.json()),
                     fetch(`http://localhost:8000/api/topics/by-lesson/${lessonId}`).then((res) => res.json()),
                     fetch(`http://localhost:8000/api/v1/lessons/${lessonId}/tests`).then((res) => res.json()),
-                    fetch(`http://localhost:8000/api/tests/${lessonId}/test-results-summary/${user.id}`).then((res) =>
-                        res.json()
-                    ),
+                    fetch(`http://localhost:8000/api/tests/${lessonId}/test-results-summary/${user.id}`).then((res) => res.json()),
                 ]);
 
+                console.log({ lessonResponse, topicsResponse, testsResponse, testSummaryResponse });
+
+
+                const topicsWithUrls = await fetchPresignedUrls(topicsResponse);
+                setTopics(topicsWithUrls);
                 setLesson(lessonResponse);
-                setTopics(topicsResponse);
                 setTests(testsResponse);
                 setTestSummary(testSummaryResponse);
             } catch (err) {
@@ -74,6 +78,7 @@ const LessonDetail = () => {
             try {
                 const filePath = lesson.fileUrl.replace(`http://localhost:9000/cousera/`, "");
                 const presignedUrl = await getPresignedDownloadUrl(filePath);
+                setImegs(presignedUrl)
                 await downloadFile(presignedUrl);
                 alert("Файл успешно скачан!");
             } catch (error) {
@@ -190,10 +195,40 @@ const LessonDetail = () => {
                             <Typography variant="h6" sx={{ color: "text.secondary", fontStyle: "italic", lineHeight: 1.6 }}>
                                 {topic.title}
                             </Typography>
+
+                            {topic.files.map((file, fileIndex) => (
+                                <Box key={fileIndex} sx={{ mt: 2 }}>
+                                    {file.downloadUrl ? (
+                                        file.contentType.startsWith("image/") ? (
+                                            <img
+                                                src={file.downloadUrl}
+                                                alt={`Файл темы ${topic.name}`}
+                                                style={{ maxWidth: "100%", borderRadius: 8 }}
+                                            />
+                                        ) : file.contentType.startsWith("video/") ? (
+                                            <video
+                                                controls
+                                                src={file.downloadUrl}
+                                                style={{ maxWidth: "100%", borderRadius: 8 }}
+                                            />
+                                        ) : (
+                                            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                                                Неподдерживаемый формат: {file.contentType}
+                                            </Typography>
+                                        )
+                                    ) : (
+                                        <Typography variant="body2" sx={{ color: "error.main" }}>
+                                            URL для скачивания отсутствует
+                                        </Typography>
+                                    )}
+                                </Box>
+                            ))}
+
                         </Box>
                     ))}
                 </Box>
             )}
+
 
             {selectedTab === 1 &&
                 (tests.length === 0 ? (

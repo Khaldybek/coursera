@@ -16,21 +16,25 @@ const createTopic = async (formData) => {
 };
 
 
-export const fetchPresignedUrls = async (files) => {
+export const fetchPresignedUrls = async (topics) => {
     try {
         return await Promise.all(
-            files.map(async (file) => {
-                if (!file || !file.fileUrl) {
-                    console.warn("File or fileUrl is missing:", file);
-                    return file;
-                }
-                const filePath = file.fileUrl.replace(`http://localhost:9000/cousera/`, "");
-                const downloadUrl = await getPresignedDownloadUrl(filePath);
-                return { ...file, downloadUrl };
+            topics.map(async (topic) => {
+                if (!topic.files || topic.files.length === 0) return topic;
+
+                const filesWithUrls = await Promise.all(
+                    topic.files.map(async (file) => {
+                        const filePath = file.fileUrl.replace(`http://localhost:9000/cousera/`, "");
+                        const downloadUrl = await getPresignedDownloadUrl(filePath);
+                        return { ...file, downloadUrl };
+                    })
+                );
+
+                return { ...topic, files: filesWithUrls };
             })
         );
     } catch (error) {
-        console.error("Ошибка получения presigned URL:", error);
+        console.error("Ошибка получения presigned URLs:", error);
         throw error;
     }
 };
