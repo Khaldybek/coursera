@@ -1,21 +1,13 @@
 import axios from "axios";
+import {getPresignedDownloadUrl} from "./minio.service.js";
 
 const API_URL = "http://localhost:8000/api/topics";
 
-const createTopic = async (lessonId, name, description, title) => {
+const createTopic = async (formData) => {
     try {
-        const response = await axios.post(
-            `${API_URL}/create`,
-            null,
-            {
-                params: {
-                    name,
-                    description,
-                    title,
-                    lessonId
-                }
-            }
-        );
+        const response = await axios.post("http://localhost:8000/api/topics/create", formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        });
         return response.data;
     } catch (error) {
         console.log("Error creating topic:", error);
@@ -23,6 +15,24 @@ const createTopic = async (lessonId, name, description, title) => {
     }
 };
 
+
+export const fetchPresignedUrls = async (files) => {
+    try {
+        return await Promise.all(
+            files.map(async (file) => {
+                if (!file || !file.fileUrl) {
+                    console.warn("File or fileUrl is missing:", file);
+                    return file;
+                }
+                const filePath = file.fileUrl.replace(`http://localhost:9000/cousera/`, "");
+                return { ...file, filePath };
+            })
+        );
+    } catch (error) {
+        console.error("Ошибка получения presigned URL:", error);
+        throw error;
+    }
+};
 
 
 // Функция для удаления темы
@@ -52,6 +62,7 @@ const deleteTopic = async (topicId) => {
 
 const TopicService = {
     createTopic,
+    fetchPresignedUrls,
     deleteTopic,
     fetchTopic,
     takeTest
