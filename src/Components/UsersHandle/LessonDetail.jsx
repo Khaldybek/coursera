@@ -195,7 +195,7 @@ const LessonDetail = () => {
                                 <Typography variant="h6" sx={{ color: "text.secondary", fontStyle: "italic", lineHeight: 1.6 }}>
                                     {topic.title}
                                 </Typography>
-                                {topic.files.map((file, fileIndex) => (
+                                {Array.isArray(topic?.files) && topic.files.map((file, fileIndex) => (
                                     <Box key={fileIndex} sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
                                         {file.downloadUrl ? (
                                             file.contentType.startsWith("image/") ? (
@@ -234,6 +234,7 @@ const LessonDetail = () => {
                                         )}
                                     </Box>
                                 ))}
+
                             </Box>
                         ))
                     ) : (
