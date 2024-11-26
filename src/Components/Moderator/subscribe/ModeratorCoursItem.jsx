@@ -27,7 +27,7 @@ export default function ModeratorCoursItem({ data }) {
         }}>
             <CardContent>
                 <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: '#1e88e5' }}>
-                    {data.name}
+                    {data.name.substring(0, 25)}..
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     {data.companyName || "No company specified"}
