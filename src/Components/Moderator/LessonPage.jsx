@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Card, Typography, List, Spin, notification, Modal, Button, Popconfirm, Input, Upload } from 'antd';
 import { PlusOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import TopicService from "../../services/topic.service.js";
-
+import { motion } from "framer-motion";
 const { TextArea } = Input;
 const { Title, Text } = Typography;
 
@@ -84,16 +84,80 @@ export default function LessonPage() {
             {/* Темы */}
             <List
                 dataSource={topics}
-                renderItem={topic => (
-                    <List.Item>
-                        <List.Item.Meta title={topic.name} description={topic.description} />
-                        <Popconfirm
-                            title="Удалить тему?"
-                            onConfirm={() => handleDeleteTopic(topic.id)}
+                renderItem={(topic) => (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <Link
+                            to={`/courses/${id}/modules/${moduleId}/lessons/${lessonId}/topics/${topic.id}`}
+                            style={{
+                                color: "#1890ff",
+                                fontWeight: "bold",
+                                textDecoration: "none",
+                            }}
                         >
-                            <DeleteOutlined style={{ color: 'red' }} />
-                        </Popconfirm>
-                    </List.Item>
+                            <List.Item
+                                style={{
+                                    padding: "12px 16px",
+                                    border: "1px solid #f0f0f0",
+                                    borderRadius: "8px",
+                                    marginBottom: "12px",
+                                    transition: "box-shadow 0.3s",
+                                }}
+                                onMouseEnter={(e) =>
+                                    (e.currentTarget.style.boxShadow =
+                                        "0 4px 12px rgba(0, 0, 0, 0.15)")
+                                }
+                                onMouseLeave={(e) =>
+                                    (e.currentTarget.style.boxShadow = "none")
+                                }
+                            >
+                                <List.Item.Meta
+                                    title={
+                                        <span
+                                            style={{
+                                                fontSize: "16px",
+                                                fontWeight: "600",
+                                                color: "#333",
+                                            }}
+                                        >
+                                        {topic.name}
+                                    </span>
+                                    }
+                                    description={
+                                        <span
+                                            style={{
+                                                fontSize: "14px",
+                                                color: "#666",
+                                                lineHeight: "1.4",
+                                            }}
+                                        >
+                                        {topic.description}
+                                    </span>
+                                    }
+                                />
+                                <Popconfirm
+                                    title="Удалить тему?"
+                                    onConfirm={() => handleDeleteTopic(topic.id)}
+                                    okText="Да"
+                                    cancelText="Нет"
+                                >
+                                    <Button
+                                        type="text"
+                                        icon={<DeleteOutlined style={{ color: "red" }} />}
+                                        style={{
+                                            backgroundColor: "transparent",
+                                            border: "none",
+                                            padding: 0,
+                                        }}
+                                    />
+                                </Popconfirm>
+                            </List.Item>
+                        </Link>
+                    </motion.div>
                 )}
             />
 
