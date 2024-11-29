@@ -3,21 +3,17 @@ import authService from "./auth.service.js";
 const API_URL = "http://localhost:8000/api/v1/courses";
 const API_BASE_URL = "http://localhost:8000/api/v1/lessons";
 
-const create = async (name, description, companyName) => {
+const create = async (formData) => {
     try {
-        const moderator=authService.getCurrentUser()
-        const moderatorId= moderator.id;
-        const response = await axios.post(API_URL, {
-            name,
-            description,
-            companyName,
-            moderatorId
-
+        const response = await axios.post(API_URL, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         });
         return response.data;
     } catch (error) {
         console.error("Ошибка при создании курса:", error);
-        throw error;  // Пробрасываем ошибку для обработки на уровне компонентов
+        throw error;
     }
 };
 
