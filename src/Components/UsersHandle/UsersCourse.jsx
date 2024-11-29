@@ -19,6 +19,7 @@ const UsersCourse = () => {
                 })
                 .catch(error => {
                     console.error("Error fetching subscribed courses:", error);
+                    console.log("==============")
                     setLoading(false);
                 });
         } else {
