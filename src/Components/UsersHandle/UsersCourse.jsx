@@ -66,7 +66,7 @@ const UsersCourse = () => {
     };
 
     return (
-        <Box sx={{ padding: 4, backgroundColor: "#f4f5f7", minHeight: "100vh" }}>
+        <Box sx={{ padding: 4, backgroundColor: "#f4f5f7", width: "100%" ,height: "100vh" }}>
             <Typography
                 variant="h4"
                 sx={{ textAlign: "center", mb: 4, fontWeight: "bold", color: "text.primary" }}
