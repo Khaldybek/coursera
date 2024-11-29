@@ -1,21 +1,32 @@
 import React from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import CoursesService from "../../services/courses.service.js";
+import authService from "../../services/auth.service.js";
 
 export default function CreateCourses({ onCourseCreated }) {
     const [form] = Form.useForm();
 
     const handleSave = async (values) => {
         try {
-            // Отправка данных на сервер через CoursesService
-            const newCourse = await CoursesService.create(values.name, values.description, values.companyName);
-            // Передаем новый курс в родительский компонент для обновления списка
+            const moderator=authService.getCurrentUser()
+            const moderatorId= moderator.id;
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("description", values.description);
+            formData.append("companyName", values.companyName);
+            formData.append("moderatorId", moderatorId);
+            formData.append("image", values.image[0].originFileObj);
+
+            // Send data to the server through CoursesService
+            const newCourse = await CoursesService.create(formData);
+
+            // Pass the new course to the parent component
             onCourseCreated(newCourse);
 
-            // Очистка полей формы после успешного сохранения
+            // Reset form fields
             form.resetFields();
         } catch (error) {
-            // Обработка ошибок
             alert('Произошла ошибка при создании курса.');
         }
     };
@@ -31,11 +42,12 @@ export default function CreateCourses({ onCourseCreated }) {
                 >
                     <Input placeholder="e.g John" />
                 </Form.Item>
+
                 <Form.Item
                     name="description"
                     label="Description"
                     style={{ maxWidth: "893px" }}
-                    rules={[{ required: true, message: "Please enter courses description" }]}
+                    rules={[{ required: true, message: "Please enter course description" }]}
                 >
                     <Input placeholder="e.g Detailed description" />
                 </Form.Item>
@@ -47,6 +59,23 @@ export default function CreateCourses({ onCourseCreated }) {
                     rules={[{ required: true, message: "Please enter Company name" }]}
                 >
                     <Input placeholder="e.g Company name" />
+                </Form.Item>
+
+                <Form.Item
+                    name="image"
+                    label="Course Image"
+                    valuePropName="fileList"
+                    getValueFromEvent={(e) => e?.fileList}
+                    rules={[{ required: true, message: "Please upload an image" }]}
+                >
+                    <Upload
+                        name="image"
+                        beforeUpload={() => false}
+                        maxCount={1}
+                        showUploadList={{ showRemoveIcon: true }}
+                    >
+                        <Button icon={<UploadOutlined />}>Upload Image</Button>
+                    </Upload>
                 </Form.Item>
 
                 <Form.Item>
