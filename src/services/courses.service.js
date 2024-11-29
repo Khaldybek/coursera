@@ -43,7 +43,6 @@ const getCurrentUser = () => {
 
 // Получение всех курсов
 const getAll = async () => {
-    console.log(`Ayoooom`);
     try {
         const response = await axios.get(API_URL);
         console.log(response.data);

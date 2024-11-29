@@ -224,12 +224,10 @@ const LessonDetail = () => {
                                                 />
                                             ) : (
                                                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                                    Неподдерживаемый формат: {file.contentType}
                                                 </Typography>
                                             )
                                         ) : (
                                             <Typography variant="body2" sx={{ color: "error.main" }}>
-                                                URL для скачивания отсутствует
                                             </Typography>
                                         )}
                                     </Box>

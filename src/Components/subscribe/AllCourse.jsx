@@ -1,34 +1,71 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {
-    CircularProgress,
-    Grid,
+    Avatar,
     Box,
+    Button,
     Card,
     CardContent,
-    Typography,
-    Button,
-    Avatar,
+    CardMedia,
+    CircularProgress,
+    Grid,
     Tooltip,
+    Typography,
 } from "@mui/material";
-import { LockOutlined } from "@ant-design/icons";
+import {LockOutlined} from "@ant-design/icons";
 import CourseService from "../../services/courses.service.js";
+import SampleImage from "../../Style/imeg/2bf1422598e3129ec9052c560640d366.jpg";
+import {fetchPresignedCourseUrls} from "../../services/topic.service.js";
 
 const AllCourse = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [modulesWithUrls, setModulesWithUrls] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        CourseService.getAll()
-            .then((response) => {
+        const fetchCourses = async () => {
+            try {
+                console.log("Fetching courses...");
+                const response = await CourseService.getAll();
+                console.log("Courses response:", response);
+
                 setCourses(response || []);
-                setLoading(false);
-            })
-            .catch((error) => {
+
+                if (!Array.isArray(response)) {
+                    console.error("Error: response is not an array", response);
+                    return;
+                }
+
+                const coursesWithUrlsArray = await Promise.all(
+                    response.map(async (course) => {
+                        try {
+                            const result = await fetchPresignedCourseUrls(course);
+                            return { id: course.id, files: result?.files || [] };
+                        } catch (error) {
+                            console.error(`Error fetching URLs for course ${course.name}:`, error);
+                            return { id: course.id, files: [] };
+                        }
+                    })
+                );
+
+                const coursesWithUrls = coursesWithUrlsArray.reduce((acc, item) => {
+                    acc[item.id] = item;
+                    return acc;
+                }, {});
+
+                console.log("Completed fetching all course URLs:", coursesWithUrls);
+                setModulesWithUrls(coursesWithUrls);
+            } catch (error) {
                 console.error("Error fetching courses:", error);
+            } finally {
                 setLoading(false);
-            });
+                console.log("Finished loading courses.");
+            }
+        };
+
+
+        fetchCourses();
     }, []);
 
     const handleCourseClick = (courseId) => {
@@ -69,11 +106,18 @@ const AllCourse = () => {
                                         position: "relative",
                                     }}
                                 >
-                                    <Box sx={{ position: "absolute", top: 10, right: 10 }}>
+                                    <Box sx={{position: "absolute", top: 10, right: 10}}>
                                         <Tooltip title="Курс заблокирован">
-                                            <LockOutlined style={{ color: "#d32f2f", fontSize: "1.5rem" }} />
+                                            <LockOutlined style={{color: "#d32f2f", fontSize: "1.5rem"}}/>
                                         </Tooltip>
                                     </Box>
+                                    <CardMedia
+                                        component="img"
+                                        alt={course.name}
+                                        image={modulesWithUrls?.[course.id]?.files?.[0]?.downloadUrl || SampleImage}
+                                        sx={{ height: 180, objectFit: 'cover', borderRadius: 2 }}
+                                    />
+
                                     <CardContent>
                                         <Typography
                                             variant="h6"
@@ -109,26 +153,26 @@ const AllCourse = () => {
                                                 mb: 2,
                                             }}
                                         >
-                                            <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
+                                            <Avatar sx={{bgcolor: "primary.main", mr: 2}}>
                                                 {course.companyName.charAt(0).toUpperCase()}
                                             </Avatar>
-                                            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                                            <Typography variant="body2" sx={{color: "text.secondary"}}>
                                                 {course.companyName}
                                             </Typography>
                                         </Box>
                                         <Typography
                                             variant="caption"
-                                            sx={{ color: "text.secondary", display: "block", mb: 2 }}
+                                            sx={{color: "text.secondary", display: "block", mb: 2}}
                                         >
                                             Дата создания: {new Date(course.createAt).toLocaleDateString()}
                                         </Typography>
                                     </CardContent>
-                                    <Box sx={{ padding: 2 }}>
+                                    <Box sx={{padding: 2}}>
                                         <Button
                                             variant="contained"
                                             color="primary"
                                             fullWidth
-                                            sx={{ textTransform: "none", borderRadius: 2 }}
+                                            sx={{textTransform: "none", borderRadius: 2}}
                                             onClick={() => handleCourseClick(course.id)}
                                         >
                                             Перейти к курсу

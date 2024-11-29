@@ -39,6 +39,31 @@ export const fetchPresignedUrls = async (topics) => {
     }
 };
 
+export const fetchPresignedCourseUrls = async (course) => {
+    try {
+        let filesWithUrls;
+        if (typeof course.image === 'string') {
+            const filePath = course.image.replace(`http://localhost:9000/cousera/`, "");
+            const downloadUrl = await getPresignedDownloadUrl(filePath);
+            filesWithUrls = [{ ...course, downloadUrl }];
+        } else {
+            filesWithUrls = await Promise.all(
+                course.image.map(async (file) => {
+                    const filePath = file.image.replace(`http://localhost:9000/cousera/`, "");
+                    console.log(filePath);
+                    const downloadUrl = await getPresignedDownloadUrl(filePath);
+                    return { ...file, downloadUrl };
+                })
+            );
+        }
+        return { ...course, files: filesWithUrls };
+    } catch (error) {
+        console.error("Ошибка получения presigned URLs:", error);
+        throw error;
+    }
+};
+
+
 
 // Функция для удаления темы
 const deleteTopic = async (topicId) => {
@@ -68,6 +93,7 @@ const deleteTopic = async (topicId) => {
 const TopicService = {
     createTopic,
     fetchPresignedUrls,
+    fetchPresignedCourseUrls,
     deleteTopic,
     fetchTopic,
     takeTest

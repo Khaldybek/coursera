@@ -2,21 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Grid, CardMedia, ButtonBase } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import CourseService from "../../services/courses.service.js";
+import { fetchPresignedCourseUrls } from "../../services/topic.service.js";
 import SampleImage from "../../Style/imeg/2bf1422598e3129ec9052c560640d366.jpg";
 
 const CourseDetail = () => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
+    const [image, setImage] = useState(null);
+    const [modulesWithUrls, setModulesWithUrls] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        CourseService.getCourseById(courseId)
-            .then(response => {
+        const fetchCourseDetails = async () => {
+            try {
+                const response = await CourseService.getCourseById(courseId);
                 setCourse(response);
-            })
-            .catch(error => {
+
+                const topicsWithUrls = await fetchPresignedCourseUrls(response);
+                console.log(" modulesWithUrls " , modulesWithUrls);
+                setModulesWithUrls(topicsWithUrls);
+            } catch (error) {
                 console.error("Error fetching course details:", error);
-            });
+            }
+        };
+        fetchCourseDetails();
     }, [courseId]);
 
     if (!course) {
@@ -26,6 +35,8 @@ const CourseDetail = () => {
     const handleModuleClick = (moduleId) => {
         navigate(`/course/${courseId}/module/${moduleId}`);
     };
+
+    const courseImage = modulesWithUrls?.files?.[0]?.downloadUrl || SampleImage;
 
     return (
         <Box sx={{ padding: 5, maxWidth: "100vw", width: "100%", margin: '0', backgroundColor: '#f9f9f9' }}>
@@ -42,9 +53,9 @@ const CourseDetail = () => {
                 <Grid item margin={2} xs={12} sm={6} md={4} lg={3}>
                     <CardMedia
                         component="img"
-                        image={SampleImage}
+                        image={courseImage}
                         alt="Course Image"
-                        sx={{ borderRadius: 10, width: '300px', boxShadow: 3 }}
+                        sx={{ borderRadius: 10, width: '300px',height: '300px', boxShadow: 3 }}
                     />
                 </Grid>
 
@@ -76,7 +87,7 @@ const CourseDetail = () => {
                             }}
                         >
                             <Typography variant="body1" sx={{ fontWeight: 'bold', marginRight: 7, flex: '0 0 100px' }}>
-                                {`Уровень ${index + 1}`}
+                                {`Module ${index + 1}`}
                             </Typography>
                             <Box
                                 sx={{
@@ -90,7 +101,7 @@ const CourseDetail = () => {
                                     textTransform: 'uppercase',
                                 }}
                             >
-                                Доступно
+                                Available
                             </Box>
                             <Typography variant="body1" sx={{ fontWeight: 'bold', flex: '1', marginRight: 2 }}>
                                 {module.name}

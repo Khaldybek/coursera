@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Grid, CardMedia, ButtonBase } from '@mui/material';
+import { Box, Typography, Button, Grid, CardMedia, ButtonBase, CircularProgress } from '@mui/material';
 import { message } from 'antd'; // Import message from antd
 import { useParams, useNavigate } from 'react-router-dom';
 import CourseService from "../../services/courses.service.js";
 import AllCourseService from "../../services/all.courses.service.js";
 import authService from "../../services/auth.service.js";
 import SampleImage from "../../Style/imeg/2bf1422598e3129ec9052c560640d366.jpg";
+import { fetchPresignedCourseUrls } from "../../services/topic.service.js";
 
 const AllCourseDetail = () => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
+    const [modulesWithUrls, setModulesWithUrls] = useState(null);
+    const [isLoading, setIsLoading] = useState(true); // Loading state
     const navigate = useNavigate();
 
     useEffect(() => {
-        CourseService.getCourseById(courseId)
-            .then(response => {
+        const fetchCourseDetails = async () => {
+            try {
+                const response = await CourseService.getCourseById(courseId);
                 setCourse(response);
-            })
-            .catch(error => {
+
+                const topicsWithUrls = await fetchPresignedCourseUrls(response);
+                setModulesWithUrls(topicsWithUrls);
+            } catch (error) {
                 console.error("Error fetching course details:", error);
-            });
+            } finally {
+                setIsLoading(false); // Stop loading when data is fetched
+            }
+        };
+
+        fetchCourseDetails();
     }, [courseId]);
 
-    if (!course) {
-        return <Typography>Loading...</Typography>;
+    if (isLoading) {
+        return <CircularProgress />; // Show loading indicator while fetching data
     }
 
     const handleApplicationSubmit = () => {
@@ -42,6 +53,8 @@ const AllCourseDetail = () => {
         }
     };
 
+    const courseImage = modulesWithUrls?.files?.[0]?.downloadUrl || SampleImage;
+
     return (
         <Box sx={{ padding: 5, maxWidth: "100vw", width: "100%", margin: '0', backgroundColor: '#f9f9f9' }}>
             <Button
@@ -57,9 +70,9 @@ const AllCourseDetail = () => {
                 <Grid item margin={2} xs={12} sm={6} md={4} lg={3}>
                     <CardMedia
                         component="img"
-                        image={SampleImage}
+                        image={courseImage}
                         alt="Course Image"
-                        sx={{ borderRadius: 10, width: '300px', boxShadow: 3 }}
+                        sx={{ borderRadius: 10, width: '300px', height: '300px', boxShadow: 3 }}
                     />
                 </Grid>
 
