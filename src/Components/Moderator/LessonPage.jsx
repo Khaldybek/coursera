@@ -74,7 +74,7 @@ export default function LessonPage() {
     };
 
     return (
-        <div>
+        <div style={{width:'100%', height:'100vh'}}>
             {/* Урок */}
             <Card>
                 <Title>{lesson?.name}</Title>

@@ -103,7 +103,7 @@ export default function TopicPage() {
     }
 
     return (
-        <div style={{ padding: '40px 24px', backgroundColor: '#f9f9f9', width: '100%' }}>
+        <div style={{ padding: '40px 24px', backgroundColor: '#f9f9f9', width: '100%' , height: '100vh' }}>
             <Card
                 bordered={false}
                 style={{ maxWidth: 800, margin: 'auto', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}
