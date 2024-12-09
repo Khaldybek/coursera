@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CodepenCircleOutlined } from '@ant-design/icons';
+import logoImage from './logo.png'; // Импортируем изображение
+import './Logo.css';
+
 const Logo = () => {
     const navigate = useNavigate();
 
@@ -9,12 +11,15 @@ const Logo = () => {
     };
 
     return (
-        <div className="logo" >
-            <div className="logo-icon">
-                <CodepenCircleOutlined onClick={handleLogoClick} style={{ cursor: 'pointer' }} />
-            </div>
+        <div className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+            <img
+                src={logoImage}
+                alt="Logo"
+                style={{ width: '80%' }} // Настраиваем размеры изображения
+            />
         </div>
     );
 };
 
 export default Logo;
+

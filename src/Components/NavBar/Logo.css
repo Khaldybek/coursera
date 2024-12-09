@@ -1,0 +1,16 @@
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.logo img {
+    width: 100px; /* Размеры логотипа */
+    height: 100px;
+    transition: transform 0.3s ease; /* Анимация при наведении */
+}
+
+.logo img:hover {
+    transform: scale(1.1); /* Увеличение логотипа при наведении */
+}
