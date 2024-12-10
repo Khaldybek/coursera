@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Spin, FloatButton, Modal, notification } from 'antd';
-import CoursItem from './CoursItem';
+import React, { useEffect, useState } from "react";
+import { Spin, FloatButton, Modal, notification, Empty, Button } from "antd";
+import { PlusSquareOutlined, FileAddOutlined } from "@ant-design/icons";
+import CoursItem from "./CoursItem";
 import CoursesService from "../../services/courses.service.js";
 import "./Style/Courses.css";
-import { PlusSquareOutlined } from "@ant-design/icons";
 import CreateCourses from "./CreateCourses";
 
 const CoursItems = () => {
@@ -32,9 +32,9 @@ const CoursItems = () => {
     const handleCourseCreated = (newCourse) => {
         setAllCourses((prevCourses) => [...prevCourses, newCourse]); // Добавляем курс в список
         notification.success({
-            message: 'Course Created',
+            message: "Course Created",
             description: `The course "${newCourse.name}" has been successfully created!`,
-            placement: 'topRight',
+            placement: "topRight",
         });
     };
 
@@ -42,6 +42,27 @@ const CoursItems = () => {
         <div className="courses-container" style={{ paddingTop: 30 }}>
             {loading ? (
                 <Spin size="large" tip="Loading courses..." />
+            ) : allCourses.length === 0 ? (
+                <div style={{ textAlign: "center", padding: 50 }}>
+                    <Empty
+                        description={
+                            <span>
+                <strong>No Courses Found</strong>
+                <br />
+                Start creating your first course now!
+              </span>
+                        }
+                        imageStyle={{ height: 120 }}
+                    />
+                    <Button
+                        type="primary"
+                        icon={<FileAddOutlined />}
+                        onClick={() => setModal(true)}
+                        style={{ marginTop: 16 }}
+                    >
+                        Create Course
+                    </Button>
+                </div>
             ) : (
                 allCourses.map((course, index) => (
                     <div className="course-item" key={index}>
@@ -55,7 +76,10 @@ const CoursItems = () => {
                 onCancel={() => setModal(false)}
                 footer={null}
             >
-                <CreateCourses onCourseCreated={handleCourseCreated} closeModal={() => setModal(false)} />
+                <CreateCourses
+                    onCourseCreated={handleCourseCreated}
+                    closeModal={() => setModal(false)}
+                />
             </Modal>
 
             <FloatButton

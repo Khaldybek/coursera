@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Progress, Tag, Card, Typography, Spin, message } from 'antd';
+import { Table, Progress, Tag, Card, Typography, Spin, message, Button } from 'antd';
 import axios from 'axios';
 import AuthService from "../../services/auth.service.js";
+
 const { Title } = Typography;
 
 const CourseAnalysis = () => {
-    const user=AuthService.getCurrentUser()
+    const user = AuthService.getCurrentUser();
     const userId = user.id;
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Получаем курсы пользователя при изменении userId
     useEffect(() => {
         fetchCourses();
     }, [userId]);
 
+    // Функция для получения курсов
     const fetchCourses = async () => {
         setLoading(true);
         try {
             const response = await axios.get(`http://localhost:8000/api/v1/analysis/subscribed`, {
                 params: { userId },
             });
+            console.log("Courses fetched: ", response.data); // Проверим, что данные корректно загружены
             setCourses(response.data);
         } catch (error) {
             message.error('Не удалось загрузить данные. Попробуйте позже.');
@@ -28,6 +32,39 @@ const CourseAnalysis = () => {
         }
     };
 
+    // Функция для скачивания сертификата
+    const downloadCertificate = async (courseId) => {
+        console.log("Attempting to download certificate for courseId: " + courseId + " and userId: " + userId); // Проверим courseId и userId
+        try {
+            const response = await axios.post(
+                `http://localhost:8000/api/v1/analysis/generate-certificate`,  // Эндпоинт
+                null,  // Пустое тело запроса
+                {
+                    params: { userId, courseId },  // Параметры передаются в URL
+                    responseType: 'blob',  // Указываем тип ответа как blob для скачивания файла
+                }
+            );
+
+            // Проверяем, если ответ сервера успешен
+            if (response.status === 200) {
+                // Создание ссылки для скачивания файла
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `certificate_course_${courseId}.pdf`); // Название файла
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode.removeChild(link);
+            } else {
+                message.error('Ошибка при скачивании сертификата. Попробуйте позже.');
+            }
+        } catch (error) {
+            message.error('Ошибка при скачивании сертификата. Попробуйте позже.');
+            console.error('Download error:', error);
+        }
+    };
+
+    // Столбцы таблицы
     const columns = [
         {
             title: 'Курс',
@@ -40,9 +77,9 @@ const CourseAnalysis = () => {
             key: 'lessons',
             render: (record) => (
                 <span>
-          Завершено: {record.completed_lessons}/{record.total_lessons},
-          Осталось: {record.remaining_lessons}
-        </span>
+                    Завершено: {record.completed_lessons}/{record.total_lessons},
+                    Осталось: {record.remaining_lessons}
+                </span>
             ),
         },
         {
@@ -89,6 +126,20 @@ const CourseAnalysis = () => {
                 return <Tag color={colors[status]}>{labels[status]}</Tag>;
             },
         },
+        {
+            title: 'Сертификат',
+            key: 'certificate',
+            render: (record) => {
+                console.log("Rendering course with ID: ", record.course_id);  // Проверяем, что ID доступен
+                return record.completion_percentage === 100 ? (
+                    <Button type="primary" onClick={() => downloadCertificate(record.course_id)}>
+                        Скачать сертификат
+                    </Button>
+                ) : (
+                    <Tag color="volcano">Курс не завершен</Tag>
+                );
+            },
+        },
     ];
 
     return (
@@ -102,7 +153,7 @@ const CourseAnalysis = () => {
                 <Table
                     dataSource={courses}
                     columns={columns}
-                    rowKey={(record) => record.course_name}
+                    rowKey={(record) => record.id}  // Убедитесь, что используется правильное поле для ключа
                     pagination={{ pageSize: 5 }}
                     bordered
                 />

@@ -164,7 +164,7 @@ const AllCourse = () => {
                                             variant="caption"
                                             sx={{color: "text.secondary", display: "block", mb: 2}}
                                         >
-                                            Дата создания: {new Date(course.createAt).toLocaleDateString()}
+                                            Дата создания: {course.createAt}
                                         </Typography>
                                     </CardContent>
                                     <Box sx={{padding: 2}}>

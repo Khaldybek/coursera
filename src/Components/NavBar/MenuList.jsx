@@ -94,7 +94,7 @@ const MenuList = () => {
             key: "logout",
             icon: <LogoutOutlined style={{ fontSize: "20px" }} />,
             onClick: showLogoutModal,
-            style: { marginTop: 'auto', marginBottom: '20px' }
+            style: { marginTop: 'auto', marginBottom: '100px' }
         }
     ];
 

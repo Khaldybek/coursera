@@ -9,7 +9,7 @@ const createLesson = async (moduleId, lessonName, lessonDescription, level, file
     formData.append("lessonDescription", lessonDescription);
     formData.append("level", level);
     if (file) {
-        formData.append("file", file); // Добавляем файл
+        formData.append("git pull --rebase\nfile", file); // Добавляем файл
     }
 
     console.log("Данные для отправки на сервер:", formData.get("file")); // Лог файла
