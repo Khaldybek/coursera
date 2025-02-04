@@ -3,15 +3,11 @@ import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-// Components
 import AboutUs from "./Components/AboutUs";
 import AuthService from "./services/auth.service";
 import Moderators from "./Components/Admin/Moderators";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import Home from "./Components/Home";
-import Profile from "./Components/Profile";
-import BoardUser from "./Components/BoardUser";
 import BoardModerator from "./Components/BoardModerator";
 import BoardAdmin from "./Components/BoardAdmin";
 import Users from "./Components/Admin/Users";
@@ -27,10 +23,10 @@ import LessonDetail from "./Components/UsersHandle/LessonDetail";
 import AllCourse from "./Components/subscribe/AllCourse";
 import AllCourseDetail from "./Components/subscribe/AllCourseDetail";
 import ModeratorCourses from "./Components/Moderator/subscribe/ModeratorCourses";
-import GetAllCoursesModerator from "./Components/Moderator/subscribe/GetAllCoursesModerator";
+import GetAllCoursesModerator from "./Components/Moderator/subscribe/GetAllCoursesModerator.jsx";
 import CourseAnalysis from "./Components/UsersHandle/CourseAnalysis.jsx";
-// Utilities
-import EventBus from "./common/EventBus";
+
+import EventBus from "./Common/EventBus.js";
 import Navbar from "./Components/NavBar/Navbar.jsx";
 import CoursesOverview from "./Components/Moderator/CoursesOverview.jsx";
 

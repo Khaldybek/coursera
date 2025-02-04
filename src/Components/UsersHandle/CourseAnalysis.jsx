@@ -130,7 +130,7 @@ const CourseAnalysis = () => {
             title: 'Сертификат',
             key: 'certificate',
             render: (record) => {
-                console.log("Rendering course with ID: ", record.course_id);  // Проверяем, что ID доступен
+                console.log("Rendering course with ID: ", record.course_id);
                 return record.completion_percentage === 100 ? (
                     <Button type="primary" onClick={() => downloadCertificate(record.course_id)}>
                         Скачать сертификат

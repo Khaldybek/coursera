@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import logoImage from './logo.png'; // Импортируем изображение
+// import logoImage from './logo.png'; // Импортируем изображение
 import './Logo.css';
 
 const Logo = () => {
@@ -13,7 +13,7 @@ const Logo = () => {
     return (
         <div className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
             <img
-                src={logoImage}
+                // src={logoImage}
                 alt="Logo"
                 style={{ width: '80%' }} // Настраиваем размеры изображения
             />
